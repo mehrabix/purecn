@@ -7,14 +7,11 @@ const rootDir = path.resolve(__dirname);
  * @type {import('@rspack/cli').Configuration}
  */
 const config = {
-  entry: {
-    main: path.resolve(rootDir, 'src/index.ts'),
-    ...Object.fromEntries(
-      fs.readdirSync(path.resolve(rootDir, 'src/components'))
-        .filter(dir => fs.statSync(path.resolve(rootDir, 'src/components', dir)).isDirectory())
-        .map(dir => [dir, path.resolve(rootDir, 'src/components', dir, 'index.ts')])
-    )
-  },
+  entry: Object.fromEntries(
+    fs.readdirSync(path.resolve(rootDir, 'src/components'))
+      .filter(dir => fs.statSync(path.resolve(rootDir, 'src/components', dir)).isDirectory())
+      .map(dir => [dir, path.resolve(rootDir, 'src/components', dir, 'index.ts')])
+  ),
   output: {
     path: path.resolve(rootDir, 'dist'),
     filename: '[name].js',
