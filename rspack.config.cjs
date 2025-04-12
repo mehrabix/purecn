@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
+const zlib = require('zlib');
 
 const rootDir = path.resolve(__dirname);
 
@@ -14,6 +15,26 @@ const getEntries = () => {
       entries[`${dir}.min`] = path.resolve(rootDir, 'src/components', dir, 'index.ts');
     });
   return entries;
+};
+
+// Compression function
+const compressFiles = (dir) => {
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
+
+    if (stat.isDirectory()) {
+      compressFiles(filePath);
+    } else if (file.endsWith('.js')) {
+      const content = fs.readFileSync(filePath);
+      const gzContent = zlib.gzipSync(content);
+      const brContent = zlib.brotliCompressSync(content);
+      fs.writeFileSync(`${filePath}.gz`, gzContent);
+      fs.writeFileSync(`${filePath}.br`, brContent);
+      console.log(`Compressed: ${filePath}`);
+    }
+  }
 };
 
 /**
@@ -110,6 +131,22 @@ const config = {
     extensions: ['.tsx', '.ts', '.js', '.css', '.scss'],
   },
   mode: 'production',
+  plugins: [
+    {
+      name: 'compression-plugin',
+      apply(compiler) {
+        compiler.hooks.afterEmit.tap('CompressionPlugin', () => {
+          console.log('Starting compression...');
+          try {
+            compressFiles(path.resolve(rootDir, 'dist/components'));
+            console.log('Compression completed!');
+          } catch (error) {
+            console.error('Error during compression:', error);
+          }
+        });
+      },
+    },
+  ],
 };
 
 module.exports = config; 
