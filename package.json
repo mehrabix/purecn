@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rspack build --config rspack.config.cjs",
     "dev": "rspack serve --config rspack.config.cjs",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "types": "tsc --project tsconfig.declaration.json",
+    "build:all": "pnpm clean && pnpm build && pnpm types"
   },
   "keywords": [],
   "author": "",

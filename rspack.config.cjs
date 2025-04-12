@@ -14,7 +14,7 @@ const config = {
   ),
   output: {
     path: path.resolve(rootDir, 'dist'),
-    filename: '[name].js',
+    filename: 'components/[name]/[name].js',
     library: {
       type: 'umd',
       name: 'WebComponents',
