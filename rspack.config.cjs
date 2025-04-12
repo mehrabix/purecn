@@ -1,26 +1,62 @@
 const path = require('path');
 const fs = require('fs');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const rootDir = path.resolve(__dirname);
+
+// Get component entries
+const getEntries = () => {
+  const entries = {};
+  fs.readdirSync(path.resolve(rootDir, 'src/components'))
+    .filter(dir => fs.statSync(path.resolve(rootDir, 'src/components', dir)).isDirectory())
+    .forEach(dir => {
+      entries[dir] = path.resolve(rootDir, 'src/components', dir, 'index.ts');
+      entries[`${dir}.min`] = path.resolve(rootDir, 'src/components', dir, 'index.ts');
+    });
+  return entries;
+};
 
 /**
  * @type {import('@rspack/cli').Configuration}
  */
 const config = {
-  entry: Object.fromEntries(
-    fs.readdirSync(path.resolve(rootDir, 'src/components'))
-      .filter(dir => fs.statSync(path.resolve(rootDir, 'src/components', dir)).isDirectory())
-      .map(dir => [dir, path.resolve(rootDir, 'src/components', dir, 'index.ts')])
-  ),
+  entry: getEntries(),
   output: {
-    path: path.resolve(rootDir, 'dist'),
-    filename: 'components/[name]/[name].js',
+    path: path.resolve(rootDir, 'dist/components'),
+    filename: (pathData) => {
+      const name = pathData.chunk.name;
+      const isMin = name.endsWith('.min');
+      const baseName = isMin ? name.slice(0, -4) : name;
+      return `${baseName}/${isMin ? '[name]' : baseName}.js`;
+    },
     library: {
       type: 'umd',
       name: 'WebComponents',
     },
     globalObject: 'this',
     clean: true,
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        test: /\.min\.js$/,
+        extractComments: false,
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+          compress: {
+            dead_code: true,
+            drop_console: true,
+            drop_debugger: true,
+            pure_funcs: ['console.log'],
+            passes: 2,
+          },
+          mangle: true,
+        },
+      }),
+    ],
   },
   devServer: {
     static: [
@@ -73,7 +109,7 @@ const config = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.css', '.scss'],
   },
-  mode: 'development',
+  mode: 'production',
 };
 
 module.exports = config; 

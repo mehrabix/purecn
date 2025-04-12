@@ -38,6 +38,7 @@
     "serve": "^14.2.4",
     "style-loader": "^3.3.4",
     "terser": "^5.29.2",
+    "terser-webpack-plugin": "^5.3.14",
     "ts-jest": "^29.1.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.3"
