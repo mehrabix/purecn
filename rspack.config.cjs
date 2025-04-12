@@ -22,6 +22,24 @@ const config = {
     globalObject: 'this',
     clean: true,
   },
+  devServer: {
+    static: [
+      {
+        directory: path.join(__dirname, 'demo'),
+        publicPath: '/',
+      },
+      {
+        directory: path.join(__dirname, 'dist'),
+        publicPath: '/dist',
+      }
+    ],
+    port: 3000,
+    hot: true,
+    open: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
   module: {
     rules: [
       {
