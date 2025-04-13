@@ -61,17 +61,17 @@ const config = {
       return `${baseName}/${isMin ? '[name]' : baseName}.js`;
     },
     library: {
-      type: 'module',
+      type: 'commonjs2'
     },
-    module: true,
-    chunkFormat: 'module',
+    globalObject: 'this',
     environment: {
-      module: true,
+      module: false,
+      dynamicImport: false
     },
     clean: true,
   },
   experiments: {
-    outputModule: true,
+    outputModule: false,
   },
   optimization: {
     minimize: true,
@@ -80,18 +80,27 @@ const config = {
         test: /\.min\.js$/,
         extractComments: false,
         terserOptions: {
+          parse: {
+            ecma: 8
+          },
           format: {
             comments: false,
+            ecma: 5,
+            ascii_only: true
           },
           compress: {
+            ecma: 5,
+            warnings: false,
+            comparisons: false,
+            inline: 2,
             dead_code: true,
             drop_console: true,
             drop_debugger: true,
-            pure_funcs: ['console.log'],
-            passes: 2,
+            pure_funcs: ['console.log']
           },
-          mangle: true,
-          module: true,
+          mangle: {
+            safari10: true
+          }
         },
       }),
     ],
