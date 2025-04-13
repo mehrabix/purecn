@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadcn-Grid Build Test</title>
+
+    <!-- Import theme provider from both paths to test -->
+    <script type="module">
+        async function testThemeProviders() {
+            try {
+                // Method 1: Legacy path (for backwards compatibility)
+                console.log('Testing legacy theme provider path...');
+                const legacyThemeProvider = await import('../../dist/theme-provider.min.js');
+                
+                if (legacyThemeProvider && legacyThemeProvider.applyThemes) {
+                    console.log('Legacy theme provider loaded successfully');
+                    legacyThemeProvider.applyThemes();
+                    
+                    // Apply dark theme
+                    legacyThemeProvider.setTheme('dark');
+                    console.log('Dark theme applied via legacy provider');
+                    
+                    // Test Method 2 after a short delay
+                    setTimeout(async () => {
+                        try {
+                            // Method 2: New path (proper location)
+                            console.log('Testing new theme provider path...');
+                            const newThemeProvider = await import('../../dist/components/theme/theme-provider.min.js');
+                            
+                            if (newThemeProvider && newThemeProvider.applyThemes) {
+                                console.log('New theme provider loaded successfully');
+                                // Test by switching theme
+                                newThemeProvider.setTheme('light');
+                                console.log('Light theme applied via new provider');
+                                
+                                // Switch back to dark after 1 second for demo
+                                setTimeout(() => {
+                                    newThemeProvider.setTheme('dark');
+                                    console.log('Dark theme re-applied via new provider');
+                                    
+                                    document.getElementById('theme-status').textContent = 
+                                        'Theme Provider: ✅ Both paths working correctly';
+                                }, 1000);
+                            } else {
+                                console.error('New theme provider not found');
+                                document.getElementById('theme-status').textContent = 
+                                    'Theme Provider: ❌ New path failed';
+                            }
+                        } catch (error) {
+                            console.error('Failed to load new theme provider:', error);
+                            document.getElementById('theme-status').textContent = 
+                                'Theme Provider: ❌ New path error: ' + error.message;
+                        }
+                    }, 1000);
+                } else {
+                    console.error('Legacy theme provider or applyThemes function not found');
+                    document.getElementById('theme-status').textContent = 
+                        'Theme Provider: ❌ Legacy path failed';
+                }
+            } catch (error) {
+                console.error('Failed to load legacy theme provider:', error);
+                document.getElementById('theme-status').textContent = 
+                    'Theme Provider: ❌ Legacy path error: ' + error.message;
+            }
+        }
+        
+        // Run the test
+        testThemeProviders();
+    </script>
+
+    <!-- Load component modules from their locations -->
+    <script type="module">
+        async function testComponents() {
+            try {
+                // Testing component imports
+                console.log('Testing component imports...');
+                
+                const avatarModule = await import('../../dist/components/avatar/avatar.min.js');
+                console.log('Avatar component loaded successfully');
+                
+                const buttonModule = await import('../../dist/components/button/button.min.js');
+                console.log('Button component loaded successfully');
+                
+                document.getElementById('components-status').textContent = 
+                    'Components: ✅ All components loaded correctly';
+            } catch (error) {
+                console.error('Failed to load components:', error);
+                document.getElementById('components-status').textContent = 
+                    'Components: ❌ Error: ' + error.message;
+            }
+        }
+        
+        // Run the test
+        testComponents();
+    </script>
+    
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .card {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background: var(--card);
+            color: var(--card-foreground);
+            border: 1px solid var(--border);
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .status {
+            padding: 0.5rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            font-family: monospace;
+        }
+        
+        .status-indicator {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Shadcn-Grid Build Test</h1>
+        <p>Testing the new build structure with organized component files.</p>
+        
+        <!-- Status indicators -->
+        <div class="card">
+            <h2>Build Structure Test Results</h2>
+            <div class="status" id="theme-status">Theme Provider: ⏳ Testing...</div>
+            <div class="status" id="components-status">Components: ⏳ Testing...</div>
+        </div>
+        
+        <div class="card">
+            <h2>Avatar Component</h2>
+            <div class="component-grid">
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="md" 
+                    shape="circle"
+                    status="online"
+                ></my-avatar>
+                
+                <my-avatar 
+                    alt="Test User" 
+                    size="lg" 
+                    shape="circle"
+                ></my-avatar>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Button Component</h2>
+            <div class="component-grid">
+                <my-button variant="primary" size="md">Primary Button</my-button>
+                <my-button variant="outline" size="md">Outline Button</my-button>
+                <my-button variant="destructive" size="icon">🗑️</my-button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
