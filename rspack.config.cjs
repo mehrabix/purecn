@@ -39,6 +39,14 @@ const compressFiles = (dir) => {
   }
 };
 
+// Clean dist directory before build
+const cleanDist = () => {
+  const distPath = path.resolve(rootDir, 'dist');
+  if (fs.existsSync(distPath)) {
+    fs.rmSync(distPath, { recursive: true, force: true });
+  }
+};
+
 /**
  * @type {import('@rspack/cli').Configuration}
  */
@@ -53,11 +61,17 @@ const config = {
       return `${baseName}/${isMin ? '[name]' : baseName}.js`;
     },
     library: {
-      type: 'umd',
-      name: 'WebComponents',
+      type: 'module',
     },
-    globalObject: 'this',
+    module: true,
+    chunkFormat: 'module',
+    environment: {
+      module: true,
+    },
     clean: true,
+  },
+  experiments: {
+    outputModule: true,
   },
   optimization: {
     minimize: true,
@@ -77,6 +91,7 @@ const config = {
             passes: 2,
           },
           mangle: true,
+          module: true,
         },
       }),
     ],
@@ -103,7 +118,14 @@ const config = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            compilerOptions: {
+              module: 'ESNext',
+            },
+          },
+        },
         exclude: [/node_modules/, /__tests__/, /\.test\.ts$/, /\.spec\.ts$/],
       },
       {
