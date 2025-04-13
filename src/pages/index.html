@@ -117,6 +117,17 @@
             font-family: monospace;
             margin-top: 1rem;
         }
+        
+        /* New shadcn-updates banner */
+        .shadcn-updates-banner {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--primary-foreground);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
     </style>
 
     <!-- 3. Theme Toggle Script -->
@@ -166,6 +177,10 @@
 <body>
     <h1>Web Components Demo</h1>
     
+    <div class="shadcn-updates-banner">
+        Updated with the latest shadcn UI standards (January 2025)
+    </div>
+    
     <div class="section">
         <h2>Theme Toggle</h2>
         <div class="button-group">
@@ -185,6 +200,9 @@
                 <my-button variant="primary" size="sm">Small</my-button>
                 <my-button variant="primary" size="md">Medium</my-button>
                 <my-button variant="primary" size="lg">Large</my-button>
+                <my-button variant="primary" size="icon">
+                    <span>+</span>
+                </my-button>
             </div>
         </div>
 
@@ -194,6 +212,9 @@
                 <my-button variant="secondary" size="sm">Small</my-button>
                 <my-button variant="secondary" size="md">Medium</my-button>
                 <my-button variant="secondary" size="lg">Large</my-button>
+                <my-button variant="secondary" size="icon">
+                    <span>?</span>
+                </my-button>
             </div>
         </div>
 
@@ -203,6 +224,9 @@
                 <my-button variant="outline" size="sm">Small</my-button>
                 <my-button variant="outline" size="md">Medium</my-button>
                 <my-button variant="outline" size="lg">Large</my-button>
+                <my-button variant="outline" size="icon">
+                    <span>×</span>
+                </my-button>
             </div>
         </div>
 
@@ -212,6 +236,9 @@
                 <my-button variant="ghost" size="sm">Small</my-button>
                 <my-button variant="ghost" size="md">Medium</my-button>
                 <my-button variant="ghost" size="lg">Large</my-button>
+                <my-button variant="ghost" size="icon">
+                    <span>≡</span>
+                </my-button>
             </div>
         </div>
 
@@ -230,6 +257,9 @@
                 <my-button variant="destructive" size="sm">Small</my-button>
                 <my-button variant="destructive" size="md">Medium</my-button>
                 <my-button variant="destructive" size="lg">Large</my-button>
+                <my-button variant="destructive" size="icon">
+                    <span>🗑️</span>
+                </my-button>
             </div>
         </div>
     </div>
@@ -246,6 +276,17 @@
                 <my-button variant="ghost" size="md" disabled>Ghost Disabled</my-button>
                 <my-button variant="link" size="md" disabled>Link Disabled</my-button>
                 <my-button variant="destructive" size="md" disabled>Destructive Disabled</my-button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Loading States (New)</h3>
+            <div class="button-group">
+                <my-button variant="primary" size="md" loading>Primary Loading</my-button>
+                <my-button variant="secondary" size="md" loading>Secondary Loading</my-button>
+                <my-button variant="outline" size="md" loading>Outline Loading</my-button>
+                <my-button variant="ghost" size="md" loading>Ghost Loading</my-button>
+                <my-button variant="destructive" size="md" loading>Destructive Loading</my-button>
             </div>
         </div>
 
@@ -282,68 +323,167 @@
     
     <div class="demo-section">
         <h2>Avatar Examples</h2>
-        <div class="avatar-group">
-            <!-- Circle avatars -->
-            <my-avatar 
-                src="https://github.com/shadcn.png" 
-                alt="shadcn" 
-                size="sm" 
-                shape="circle"
-            ></my-avatar>
-            <my-avatar 
-                src="https://github.com/shadcn.png" 
-                alt="shadcn" 
-                size="md" 
-                shape="circle"
-            ></my-avatar>
-            <my-avatar 
-                src="https://github.com/shadcn.png" 
-                alt="shadcn" 
-                size="lg" 
-                shape="circle"
-            ></my-avatar>
-            
-            <!-- Square avatars -->
-            <my-avatar 
-                src="https://github.com/shadcn.png" 
-                alt="shadcn" 
-                size="sm" 
-                shape="square"
-            ></my-avatar>
-            <my-avatar 
-                src="https://github.com/shadcn.png" 
-                alt="shadcn" 
-                size="md" 
-                shape="square"
-            ></my-avatar>
-            <my-avatar 
-                src="https://github.com/shadcn.png" 
-                alt="shadcn" 
-                size="lg" 
-                shape="square"
-            ></my-avatar>
-            
-            <!-- Fallback examples -->
-            <my-avatar 
-                alt="John Doe" 
-                size="md" 
-                shape="circle"
-            ></my-avatar>
-            <my-avatar 
-                alt="Jane Smith" 
-                size="md" 
-                shape="circle"
-                fallback="JS"
-            ></my-avatar>
+        
+        <div class="section">
+            <h3>Standard Sizes</h3>
+            <div class="avatar-group">
+                <!-- Circle avatars with image -->
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="sm" 
+                    shape="circle"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="md" 
+                    shape="circle"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="lg" 
+                    shape="circle"
+                ></my-avatar>
+                
+                <!-- New larger sizes -->
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="xl" 
+                    shape="circle"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="2xl" 
+                    shape="circle"
+                ></my-avatar>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Square Shape</h3>
+            <div class="avatar-group">
+                <!-- Square avatars -->
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="sm" 
+                    shape="square"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="md" 
+                    shape="square"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="lg" 
+                    shape="square"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="shadcn" 
+                    size="xl" 
+                    shape="square"
+                ></my-avatar>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Fallback Examples</h3>
+            <div class="avatar-group">
+                <!-- Fallback examples -->
+                <my-avatar 
+                    alt="John Doe" 
+                    size="md" 
+                    shape="circle"
+                ></my-avatar>
+                <my-avatar 
+                    alt="Jane Smith" 
+                    size="md" 
+                    shape="circle"
+                    fallback="JS"
+                ></my-avatar>
+                <my-avatar 
+                    alt="Shadcn UI" 
+                    size="lg" 
+                    shape="circle"
+                    fallback="UI"
+                ></my-avatar>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>Status Indicators (New)</h3>
+            <div class="avatar-group">
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="Online User" 
+                    size="md" 
+                    shape="circle"
+                    status="online"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="Busy User" 
+                    size="md" 
+                    shape="circle"
+                    status="busy"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="Away User" 
+                    size="md" 
+                    shape="circle"
+                    status="away"
+                ></my-avatar>
+                <my-avatar 
+                    src="https://github.com/shadcn.png" 
+                    alt="Offline User" 
+                    size="md" 
+                    shape="circle"
+                    status="offline"
+                ></my-avatar>
+                
+                <!-- Fallback with status -->
+                <my-avatar 
+                    alt="John Doe" 
+                    size="lg" 
+                    shape="circle"
+                    status="online"
+                ></my-avatar>
+            </div>
         </div>
     </div>
     
     <div class="code-section">
-        <h3>Usage Example</h3>
+        <h3>Usage Examples</h3>
         <pre>
-&lt;my-button variant="outline" size="md"&gt;Outline Button&lt;/my-button&gt;
-&lt;my-button variant="ghost" size="md"&gt;Ghost Button&lt;/my-button&gt;
-&lt;my-button variant="link" size="md"&gt;Link Button&lt;/my-button&gt;
+&lt;!-- Button with icon size (new) --&gt;
+&lt;my-button variant="outline" size="icon"&gt;+&lt;/my-button&gt;
+
+&lt;!-- Loading button (new) --&gt;
+&lt;my-button variant="primary" loading&gt;Loading&lt;/my-button&gt;
+
+&lt;!-- Avatar with status (new) --&gt;
+&lt;my-avatar 
+    src="https://github.com/shadcn.png" 
+    alt="User" 
+    size="md" 
+    status="online"
+&gt;&lt;/my-avatar&gt;
+
+&lt;!-- Avatar with new sizes (new) --&gt;
+&lt;my-avatar 
+    src="https://github.com/shadcn.png" 
+    alt="User" 
+    size="2xl"
+&gt;&lt;/my-avatar&gt;
         </pre>
     </div>
 </body>

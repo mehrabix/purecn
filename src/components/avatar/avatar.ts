@@ -1,7 +1,8 @@
 import styles from './avatar.scss';
 
-type AvatarSize = 'sm' | 'md' | 'lg';
+type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 type AvatarShape = 'circle' | 'square';
+type AvatarStatus = 'online' | 'offline' | 'busy' | 'away' | 'none';
 
 export class AvatarComponent extends HTMLElement {
   private shadow: ShadowRoot;
@@ -20,7 +21,7 @@ export class AvatarComponent extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['src', 'alt', 'size', 'shape', 'fallback'];
+    return ['src', 'alt', 'size', 'shape', 'fallback', 'status', 'delayMs'];
   }
 
   get src(): string {
@@ -43,6 +44,14 @@ export class AvatarComponent extends HTMLElement {
     return this.getAttribute('fallback') || '';
   }
 
+  get status(): AvatarStatus {
+    return (this.getAttribute('status') as AvatarStatus) || 'none';
+  }
+
+  get delayMs(): number {
+    return parseInt(this.getAttribute('delayMs') || '0', 10);
+  }
+
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue !== newValue) {
       this.render();
@@ -51,9 +60,9 @@ export class AvatarComponent extends HTMLElement {
 
   private handleError() {
     const fallback = this.fallback || this.alt.slice(0, 2).toUpperCase();
-    const avatar = this.shadow.querySelector('.avatar');
-    if (avatar) {
-      avatar.innerHTML = `<span class="fallback">${fallback}</span>`;
+    const avatarEl = this.shadow.querySelector('.avatar');
+    if (avatarEl) {
+      avatarEl.innerHTML = `<span class="fallback" data-slot="avatar-fallback">${fallback}</span>`;
     }
   }
 
@@ -64,13 +73,28 @@ export class AvatarComponent extends HTMLElement {
     this.shadow.innerHTML = '';
     this.shadow.appendChild(styleElement);
     
+    // Add a delay for loading the image if specified
+    const delayAttr = this.delayMs > 0 ? `loading="lazy" fetchpriority="low"` : '';
+    
+    // Image content with data-slot attribute for better styling options
     const avatarContent = this.src
-      ? `<img src="${this.src}" alt="${this.alt}">`
-      : `<span class="fallback">${this.fallback || this.alt.slice(0, 2).toUpperCase()}</span>`;
+      ? `<img 
+           src="${this.src}" 
+           alt="${this.alt}"
+           data-slot="avatar-image"
+           ${delayAttr}
+         >`
+      : `<span class="fallback" data-slot="avatar-fallback">${this.fallback || this.alt.slice(0, 2).toUpperCase()}</span>`;
+
+    // Status indicator HTML if status is set
+    const statusHtml = this.status !== 'none' 
+      ? `<span class="status-indicator ${this.status}" data-slot="avatar-status"></span>` 
+      : '';
 
     this.shadow.innerHTML += `
-      <div class="avatar ${this.size} ${this.shape}">
+      <div class="avatar ${this.size} ${this.shape}" data-slot="avatar">
         ${avatarContent}
+        ${statusHtml}
       </div>
     `;
 
