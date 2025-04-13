@@ -110,6 +110,7 @@ const config = {
     port: 3000,
     hot: true,
     open: true,
+    watchFiles: ['src/**/*'],
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
