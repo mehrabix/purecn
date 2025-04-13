@@ -4,8 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Components Demo</title>
+
+    <!-- 1. Apply Theme Styles -->
+    <script type="module">
+        try {
+            // Import the CORRECT provider bundle
+            const themeProvider = await import('../../dist/theme-provider.min.js'); 
+            if (themeProvider && themeProvider.applyThemes) {
+                themeProvider.applyThemes(); // Apply themes immediately
+            } else {
+                console.error('Theme provider or applyThemes function not found.');
+            }
+        } catch (error) {
+            console.error('Failed to load or apply theme provider:', error);
+        }
+    </script>
+
+    <!-- Load components AFTER applying theme -->
     <script type="module" defer src="../../dist/components/avatar/avatar.min.js"></script>
     <script type="module" defer src="../../dist/components/button/button.min.js"></script>
+    
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -39,6 +57,23 @@
             color: #4b5563;
         }
     </style>
+
+    <!-- 3. Theme Toggle Script -->
+    <script type="module">
+        try {
+            // Import the CORRECT provider bundle
+            const themeProvider = await import('../../dist/theme-provider.min.js'); 
+            if (themeProvider && themeProvider.setTheme) {
+                document.getElementById('set-light')?.addEventListener('click', () => themeProvider.setTheme('light'));
+                document.getElementById('set-dark')?.addEventListener('click', () => themeProvider.setTheme('dark'));
+                document.getElementById('set-system')?.addEventListener('click', () => themeProvider.setTheme('system'));
+            } else {
+                 console.error('Theme provider or setTheme function not found.');
+            }
+        } catch (error) {
+            console.error('Failed to load theme provider for toggling:', error);
+        }
+    </script>
 </head>
 <body>
     <h1>Web Components Demo</h1>

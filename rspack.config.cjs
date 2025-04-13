@@ -39,26 +39,25 @@ const compressFiles = (dir) => {
   }
 };
 
-// Clean dist directory before build
-const cleanDist = () => {
-  const distPath = path.resolve(rootDir, 'dist');
-  if (fs.existsSync(distPath)) {
-    fs.rmSync(distPath, { recursive: true, force: true });
-  }
-};
 
 /**
  * @type {import('@rspack/cli').Configuration}
  */
 const config = {
-  entry: getEntries(),
+  entry: {
+    'theme-provider': path.resolve(rootDir, 'src/components/theme/theme-provider.ts'),
+    ...getEntries()
+  },
   output: {
-    path: path.resolve(rootDir, 'dist/components'),
+    path: path.resolve(rootDir, 'dist'),
     filename: (pathData) => {
       const name = pathData.chunk.name;
+      if (name === 'theme-provider') {
+        return 'theme-provider.min.js';
+      }
       const isMin = name.endsWith('.min');
       const baseName = isMin ? name.slice(0, -4) : name;
-      return `${baseName}/${isMin ? '[name]' : baseName}.js`;
+      return `components/${baseName}/${isMin ? baseName + '.min' : baseName}.js`;
     },
     library: {
       type: 'module'
@@ -119,7 +118,7 @@ const config = {
     port: 3000,
     hot: true,
     open: true,
-    watchFiles: ['src/**/*'],
+    watchFiles: ['src/pages/**/*'],
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
@@ -172,7 +171,7 @@ const config = {
         compiler.hooks.afterEmit.tap('CompressionPlugin', () => {
           console.log('Starting compression...');
           try {
-            compressFiles(path.resolve(rootDir, 'dist/components'));
+            compressFiles(path.resolve(rootDir, 'dist'));
             console.log('Compression completed!');
           } catch (error) {
             console.error('Error during compression:', error);
