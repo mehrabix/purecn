@@ -10,7 +10,7 @@
     "clean": "rimraf dist",
     "types": "tsc --project tsconfig.declaration.json",
     "build": "pnpm test && pnpm clean && rspack build --config rspack.config.cjs && pnpm types",
-    "dev": "rspack serve --config rspack.config.cjs"
+    "dev": "pnpm build && rspack serve --config rspack.config.cjs"
   },
   "keywords": [],
   "author": "",

@@ -84,7 +84,7 @@ const config = {
   devServer: {
     static: [
       {
-        directory: path.join(__dirname, 'demo'),
+        directory: path.join(__dirname, 'src/pages'),
         publicPath: '/',
       },
       {
