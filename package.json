@@ -7,11 +7,10 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "build": "rspack build --config rspack.config.cjs && pnpm types",
-    "dev": "rspack serve --config rspack.config.cjs",
     "clean": "rimraf dist",
     "types": "tsc --project tsconfig.declaration.json",
-    "build:all": "pnpm clean && pnpm build"
+    "build": "pnpm test && pnpm clean && rspack build --config rspack.config.cjs && pnpm types",
+    "dev": "rspack serve --config rspack.config.cjs"
   },
   "keywords": [],
   "author": "",

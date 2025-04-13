@@ -25,7 +25,9 @@ const compressFiles = (dir) => {
     const stat = fs.statSync(filePath);
 
     if (stat.isDirectory()) {
-      compressFiles(filePath);
+      if (!filePath.includes('__tests__')) {
+        compressFiles(filePath);
+      }
     } else if (file.endsWith('.js')) {
       const content = fs.readFileSync(filePath);
       const gzContent = zlib.gzipSync(content);
@@ -102,7 +104,7 @@ const config = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /__tests__/, /\.test\.ts$/, /\.spec\.ts$/],
       },
       {
         test: /\.s[ac]ss$/i,
