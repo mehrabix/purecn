@@ -1,7 +1,7 @@
 import styles from './button.scss';
 
 // Types
-type ButtonVariant = 'primary' | 'secondary' | 'outline';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'link' | 'destructive';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 export class ButtonComponent extends HTMLElement {

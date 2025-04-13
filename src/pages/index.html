@@ -12,6 +12,22 @@
             const themeProvider = await import('../../dist/theme-provider.min.js'); 
             if (themeProvider && themeProvider.applyThemes) {
                 themeProvider.applyThemes(); // Apply themes immediately
+                
+                // Auto set to dark mode for testing (can be removed later)
+                setTimeout(() => {
+                    if (themeProvider.setTheme) {
+                        themeProvider.setTheme('dark');
+                        // Store preference in localStorage
+                        localStorage.setItem('theme', 'dark');
+                        // Update toggle button state
+                        const setDarkBtn = document.getElementById('set-dark');
+                        if (setDarkBtn) {
+                            setDarkBtn.classList.add('active');
+                            document.getElementById('set-light')?.classList.remove('active');
+                            document.getElementById('set-system')?.classList.remove('active');
+                        }
+                    }
+                }, 100);
             } else {
                 console.error('Theme provider or applyThemes function not found.');
             }
@@ -33,7 +49,33 @@
             gap: 2rem;
             max-width: 1200px;
             margin: 0 auto;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        /* Theme toggle styling */
+        .theme-toggle-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--border);
+            background-color: var(--background);
+            color: var(--foreground);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-toggle-btn:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+        
+        .theme-toggle-btn.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+
         .section {
             display: flex;
             flex-direction: column;
@@ -54,7 +96,26 @@
             margin: 0;
             font-size: 1.25rem;
             font-weight: 500;
-            color: #4b5563;
+            color: var(--muted-foreground);
+        }
+
+        /* Demo section styles */
+        .demo-section {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--card);
+            color: var(--card-foreground);
+        }
+
+        /* Code section */
+        .code-section {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            padding: 1rem;
+            border-radius: 0.375rem;
+            font-family: monospace;
+            margin-top: 1rem;
         }
     </style>
 
@@ -64,9 +125,36 @@
             // Import the CORRECT provider bundle
             const themeProvider = await import('../../dist/theme-provider.min.js'); 
             if (themeProvider && themeProvider.setTheme) {
-                document.getElementById('set-light')?.addEventListener('click', () => themeProvider.setTheme('light'));
-                document.getElementById('set-dark')?.addEventListener('click', () => themeProvider.setTheme('dark'));
-                document.getElementById('set-system')?.addEventListener('click', () => themeProvider.setTheme('system'));
+                const setLightBtn = document.getElementById('set-light');
+                const setDarkBtn = document.getElementById('set-dark');
+                const setSystemBtn = document.getElementById('set-system');
+                
+                // Initialize with the current theme
+                const updateActiveButton = (theme) => {
+                    setLightBtn.classList.toggle('active', theme === 'light');
+                    setDarkBtn.classList.toggle('active', theme === 'dark');
+                    setSystemBtn.classList.toggle('active', theme === 'system');
+                };
+                
+                // Get current theme
+                const currentTheme = localStorage.getItem('theme') || 'system';
+                updateActiveButton(currentTheme);
+                
+                // Event listeners
+                setLightBtn?.addEventListener('click', () => {
+                    themeProvider.setTheme('light');
+                    updateActiveButton('light');
+                });
+                
+                setDarkBtn?.addEventListener('click', () => {
+                    themeProvider.setTheme('dark');
+                    updateActiveButton('dark');
+                });
+                
+                setSystemBtn?.addEventListener('click', () => {
+                    themeProvider.setTheme('system');
+                    updateActiveButton('system');
+                });
             } else {
                  console.error('Theme provider or setTheme function not found.');
             }
@@ -79,6 +167,120 @@
     <h1>Web Components Demo</h1>
     
     <div class="section">
+        <h2>Theme Toggle</h2>
+        <div class="button-group">
+            <button id="set-light" class="theme-toggle-btn">Light Theme</button>
+            <button id="set-dark" class="theme-toggle-btn">Dark Theme</button>
+            <button id="set-system" class="theme-toggle-btn">System Theme</button>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Button Variants Overview</h2>
+        <p>A complete showcase of all button variants with proper theming in both light and dark modes</p>
+        
+        <div class="section">
+            <h3>Primary Buttons</h3>
+            <div class="button-group">
+                <my-button variant="primary" size="sm">Small</my-button>
+                <my-button variant="primary" size="md">Medium</my-button>
+                <my-button variant="primary" size="lg">Large</my-button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Secondary Buttons</h3>
+            <div class="button-group">
+                <my-button variant="secondary" size="sm">Small</my-button>
+                <my-button variant="secondary" size="md">Medium</my-button>
+                <my-button variant="secondary" size="lg">Large</my-button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Outline Buttons</h3>
+            <div class="button-group">
+                <my-button variant="outline" size="sm">Small</my-button>
+                <my-button variant="outline" size="md">Medium</my-button>
+                <my-button variant="outline" size="lg">Large</my-button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Ghost Buttons</h3>
+            <div class="button-group">
+                <my-button variant="ghost" size="sm">Small</my-button>
+                <my-button variant="ghost" size="md">Medium</my-button>
+                <my-button variant="ghost" size="lg">Large</my-button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Link Buttons</h3>
+            <div class="button-group">
+                <my-button variant="link" size="sm">Small</my-button>
+                <my-button variant="link" size="md">Medium</my-button>
+                <my-button variant="link" size="lg">Large</my-button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Destructive Buttons</h3>
+            <div class="button-group">
+                <my-button variant="destructive" size="sm">Small</my-button>
+                <my-button variant="destructive" size="md">Medium</my-button>
+                <my-button variant="destructive" size="lg">Large</my-button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Button States</h2>
+        
+        <div class="section">
+            <h3>Disabled States</h3>
+            <div class="button-group">
+                <my-button variant="primary" size="md" disabled>Primary Disabled</my-button>
+                <my-button variant="secondary" size="md" disabled>Secondary Disabled</my-button>
+                <my-button variant="outline" size="md" disabled>Outline Disabled</my-button>
+                <my-button variant="ghost" size="md" disabled>Ghost Disabled</my-button>
+                <my-button variant="link" size="md" disabled>Link Disabled</my-button>
+                <my-button variant="destructive" size="md" disabled>Destructive Disabled</my-button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>With Icons</h3>
+            <div class="button-group">
+                <my-button variant="primary" size="md">
+                    <span style="margin-right: 0.5rem;">🔍</span>
+                    Search
+                </my-button>
+                <my-button variant="secondary" size="md">
+                    <span style="margin-right: 0.5rem;">📝</span>
+                    Edit
+                </my-button>
+                <my-button variant="outline" size="md">
+                    <span style="margin-right: 0.5rem;">➕</span>
+                    Add
+                </my-button>
+                <my-button variant="ghost" size="md">
+                    <span style="margin-right: 0.5rem;">👁️</span>
+                    View
+                </my-button>
+                <my-button variant="link" size="md">
+                    <span style="margin-right: 0.5rem;">🔗</span>
+                    Link
+                </my-button>
+                <my-button variant="destructive" size="md">
+                    <span style="margin-right: 0.5rem;">🗑️</span>
+                    Delete
+                </my-button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="demo-section">
         <h2>Avatar Examples</h2>
         <div class="avatar-group">
             <!-- Circle avatars -->
@@ -135,59 +337,14 @@
             ></my-avatar>
         </div>
     </div>
-
-    <div class="section">
-        <h2>Button Examples</h2>
-        <div class="button-group">
-            <my-button variant="primary" size="sm">Small</my-button>
-            <my-button variant="primary" size="md">Medium</my-button>
-            <my-button variant="primary" size="lg">Large</my-button>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Secondary Buttons</h2>
-        <div class="button-group">
-            <my-button variant="secondary" size="sm">Small</my-button>
-            <my-button variant="secondary" size="md">Medium</my-button>
-            <my-button variant="secondary" size="lg">Large</my-button>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Outline Buttons</h2>
-        <div class="button-group">
-            <my-button variant="outline" size="sm">Small</my-button>
-            <my-button variant="outline" size="md">Medium</my-button>
-            <my-button variant="outline" size="lg">Large</my-button>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Disabled States</h2>
-        <div class="button-group">
-            <my-button variant="primary" size="md" disabled>Primary Disabled</my-button>
-            <my-button variant="secondary" size="md" disabled>Secondary Disabled</my-button>
-            <my-button variant="outline" size="md" disabled>Outline Disabled</my-button>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>With Icons</h2>
-        <div class="button-group">
-            <my-button variant="primary" size="md">
-                <span style="margin-right: 0.5rem;">🔍</span>
-                Search
-            </my-button>
-            <my-button variant="secondary" size="md">
-                <span style="margin-right: 0.5rem;">📝</span>
-                Edit
-            </my-button>
-            <my-button variant="outline" size="md">
-                <span style="margin-right: 0.5rem;">➕</span>
-                Add
-            </my-button>
-        </div>
+    
+    <div class="code-section">
+        <h3>Usage Example</h3>
+        <pre>
+&lt;my-button variant="outline" size="md"&gt;Outline Button&lt;/my-button&gt;
+&lt;my-button variant="ghost" size="md"&gt;Ghost Button&lt;/my-button&gt;
+&lt;my-button variant="link" size="md"&gt;Link Button&lt;/my-button&gt;
+        </pre>
     </div>
 </body>
 </html> 
