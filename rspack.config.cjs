@@ -61,17 +61,17 @@ const config = {
       return `${baseName}/${isMin ? '[name]' : baseName}.js`;
     },
     library: {
-      type: 'commonjs2'
+      type: 'module'
     },
     globalObject: 'this',
     environment: {
-      module: false,
-      dynamicImport: false
+      module: true,
+      dynamicImport: true
     },
     clean: true,
   },
   experiments: {
-    outputModule: false,
+    outputModule: true,
   },
   optimization: {
     minimize: true,
