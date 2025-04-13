@@ -64,21 +64,23 @@ export class AvatarComponent extends HTMLElement {
     this.shadow.innerHTML = '';
     this.shadow.appendChild(styleElement);
     
-    const avatar = document.createElement('div');
-    avatar.className = `avatar ${this.size} ${this.shape}`;
-    
+    const avatarContent = this.src
+      ? `<img src="${this.src}" alt="${this.alt}">`
+      : `<span class="fallback">${this.fallback || this.alt.slice(0, 2).toUpperCase()}</span>`;
+
+    this.shadow.innerHTML += `
+      <div class="avatar ${this.size} ${this.shape}">
+        ${avatarContent}
+      </div>
+    `;
+
+    // Add error handler if image is present
     if (this.src) {
-      const img = document.createElement('img');
-      img.src = this.src;
-      img.alt = this.alt;
-      img.onerror = () => this.handleError();
-      avatar.appendChild(img);
-    } else {
-      const fallback = this.fallback || this.alt.slice(0, 2).toUpperCase();
-      avatar.innerHTML = `<span class="fallback">${fallback}</span>`;
+      const img = this.shadow.querySelector('img');
+      if (img) {
+        img.addEventListener('error', () => this.handleError());
+      }
     }
-    
-    this.shadow.appendChild(avatar);
   }
 }
 

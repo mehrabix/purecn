@@ -49,12 +49,11 @@ export class ButtonComponent extends HTMLElement {
     this.shadow.innerHTML = '';
     this.shadow.appendChild(styleElement);
     
-    const button = document.createElement('button');
-    button.className = `btn ${this.variant} ${this.size}`;
-    button.disabled = this.disabled;
-    button.innerHTML = '<slot></slot>';
-    
-    this.shadow.appendChild(button);
+    this.shadow.innerHTML += `
+      <button class="btn ${this.variant} ${this.size}" ${this.disabled ? 'disabled' : ''}>
+        <slot></slot>
+      </button>
+    `;
   }
 }
 
