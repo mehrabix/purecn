@@ -11,9 +11,18 @@ const getEntries = () => {
   fs.readdirSync(path.resolve(rootDir, 'src/components'))
     .filter(dir => fs.statSync(path.resolve(rootDir, 'src/components', dir)).isDirectory())
     .forEach(dir => {
+      // Add regular component entry
       entries[dir] = path.resolve(rootDir, 'src/components', dir, 'index.ts');
       entries[`${dir}.min`] = path.resolve(rootDir, 'src/components', dir, 'index.ts');
     });
+  
+  // Add theme-provider as a special entry
+  const themeProviderPath = path.resolve(rootDir, 'src/components/theme/theme-provider.ts');
+  if (fs.existsSync(themeProviderPath)) {
+    entries['theme/theme-provider'] = themeProviderPath;
+    entries['theme/theme-provider.min'] = themeProviderPath;
+  }
+  
   return entries;
 };
 
@@ -44,20 +53,21 @@ const compressFiles = (dir) => {
  * @type {import('@rspack/cli').Configuration}
  */
 const config = {
-  entry: {
-    'theme-provider': path.resolve(rootDir, 'src/components/theme/theme-provider.ts'),
-    ...getEntries()
-  },
+  entry: getEntries(),
   output: {
     path: path.resolve(rootDir, 'dist'),
     filename: (pathData) => {
       const name = pathData.chunk.name;
-      if (name === 'theme-provider') {
-        return 'theme-provider.min.js';
-      }
       const isMin = name.endsWith('.min');
       const baseName = isMin ? name.slice(0, -4) : name;
-      return `components/${baseName}/${isMin ? baseName + '.min' : baseName}.js`;
+      
+      // Handle the special case for theme-provider
+      if (baseName === 'theme/theme-provider') {
+        return `components/theme/${isMin ? 'theme-provider.min' : 'theme-provider'}.js`;
+      }
+      
+      // Handle regular components
+      return `components/${baseName}/${isMin ? baseName.split('/').pop() + '.min' : baseName.split('/').pop()}.js`;
     },
     library: {
       type: 'module'
