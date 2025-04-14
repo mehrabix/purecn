@@ -13,21 +13,19 @@
             if (themeProvider && themeProvider.applyThemes) {
                 themeProvider.applyThemes(); // Apply themes immediately
                 
-                // Auto set to dark mode for testing (can be removed later)
-                setTimeout(() => {
-                    if (themeProvider.setTheme) {
-                        themeProvider.setTheme('dark');
-                        // Store preference in localStorage
-                        localStorage.setItem('theme', 'dark');
-                        // Update toggle button state
-                        const setDarkBtn = document.getElementById('set-dark');
-                        if (setDarkBtn) {
-                            setDarkBtn.classList.add('active');
-                            document.getElementById('set-light')?.classList.remove('active');
-                            document.getElementById('set-system')?.classList.remove('active');
-                        }
+                // Apply dark mode directly without setTimeout
+                if (themeProvider.setTheme) {
+                    themeProvider.setTheme('dark');
+                    // Store preference in localStorage
+                    localStorage.setItem('theme', 'dark');
+                    // Update toggle button state
+                    const setDarkBtn = document.getElementById('set-dark');
+                    if (setDarkBtn) {
+                        setDarkBtn.classList.add('active');
+                        document.getElementById('set-light')?.classList.remove('active');
+                        document.getElementById('set-system')?.classList.remove('active');
                     }
-                }, 100);
+                }
             } else {
                 console.error('Theme provider or applyThemes function not found.');
             }

@@ -21,27 +21,23 @@
                     themeProvider.setTheme('dark');
                     console.log('Dark theme applied via provider');
                     
-                    // Test theme switching after a short delay
-                    setTimeout(() => {
-                        try {
-                            // Test by switching theme
-                            themeProvider.setTheme('light');
-                            console.log('Light theme applied');
-                            
-                            // Switch back to dark after 1 second for demo
-                            setTimeout(() => {
-                                themeProvider.setTheme('dark');
-                                console.log('Dark theme re-applied');
-                                
-                                document.getElementById('theme-status').textContent = 
-                                    'Theme Provider: ✅ Working correctly';
-                            }, 1000);
-                        } catch (error) {
-                            console.error('Failed to toggle theme:', error);
-                            document.getElementById('theme-status').textContent = 
-                                'Theme Provider: ❌ Theme toggle error: ' + error.message;
-                        }
-                    }, 1000);
+                    // Test light theme immediately
+                    try {
+                        // Switch to light theme
+                        themeProvider.setTheme('light');
+                        console.log('Light theme applied');
+                        
+                        // Switch back to dark immediately for better UX
+                        themeProvider.setTheme('dark');
+                        console.log('Dark theme re-applied');
+                        
+                        document.getElementById('theme-status').textContent = 
+                            'Theme Provider: ✅ Working correctly';
+                    } catch (error) {
+                        console.error('Failed to toggle theme:', error);
+                        document.getElementById('theme-status').textContent = 
+                            'Theme Provider: ❌ Theme toggle error: ' + error.message;
+                    }
                 } else {
                     console.error('Theme provider or applyThemes function not found');
                     document.getElementById('theme-status').textContent = 
