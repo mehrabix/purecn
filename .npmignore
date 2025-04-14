@@ -1,0 +1,33 @@
+# Source files
+src/
+tests/
+__tests__/
+
+# Development files
+.github/
+.vscode/
+.idea/
+coverage/
+node_modules/
+scripts/
+
+# Config files
+.editorconfig
+.eslintrc
+.prettierrc
+.travis.yml
+.gitignore
+tsconfig.json
+tsconfig.*.json
+jest.config.js
+*.config.js
+*.config.cjs
+*.config.mjs
+*.config.ts
+
+# Misc
+*.log
+*.lock
+*.env
+.DS_Store
+CONTRIBUTING.md 

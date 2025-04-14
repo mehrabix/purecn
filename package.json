@@ -1,18 +1,32 @@
 {
   "name": "purecn",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Pure web components library with shadcn-like design",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "purecn": "./dist/cli/index.js"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./components/*": "./dist/components/*",
+    "./cli": "./dist/cli/index.js",
+    "./cli/utils": "./dist/cli/component-utils.js"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "clean": "rimraf dist",
     "types": "tsc --project tsconfig.declaration.json",
-    "build": "pnpm test && pnpm clean && rspack build --config rspack.config.cjs && pnpm types",
+    "build": "pnpm test && pnpm clean && rspack build --config rspack.config.cjs && pnpm types && node scripts/build-cli.js",
     "dev": "rspack serve --config rspack.config.cjs --watch"
   },
-  "keywords": [],
+  "keywords": [
+    "web-components",
+    "ui",
+    "pure",
+    "shadcn"
+  ],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.6.3",
@@ -38,5 +52,15 @@
     "ts-jest": "^29.1.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.3"
+  },
+  "files": [
+    "dist",
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/purecn"
   }
 }
