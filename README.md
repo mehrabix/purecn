@@ -43,9 +43,12 @@ purecn init
 
 # Initialize in a specific directory
 purecn init my-project
+
+# Initialize with TypeScript source files (skips prompt)
+purecn init my-project --source
 ```
 
-During initialization, you'll be asked if you want to use TypeScript source files or pre-built JavaScript.
+During initialization, you'll be asked if you want to use TypeScript source files or pre-built JavaScript, unless you specify the `--source` flag.
 
 ### Add a component
 
@@ -55,6 +58,12 @@ purecn components add button
 
 # Specify a custom directory
 purecn components add button ./src/components
+
+# Non-interactive mode (skips prompts, uses pre-built JS)
+purecn components add button -n
+
+# Non-interactive mode with TypeScript source files
+purecn components add button --source
 ```
 
 ### List available components
@@ -62,6 +71,19 @@ purecn components add button ./src/components
 ```bash
 purecn components list
 ```
+
+Currently available components:
+- button
+- avatar
+- theme (theme provider utilities)
+
+### CLI options
+
+| Option | Description |
+|--------|-------------|
+| `-n, --no-prompt` | Skip prompts, use pre-built JavaScript files |
+| `--source` | Skip prompts, use TypeScript source files |
+| `-h, --help` | Display help for command |
 
 ## Customizing Components (TypeScript Source)
 
@@ -125,6 +147,59 @@ If you choose pre-built JavaScript components, you can use them directly in your
 </html>
 ```
 
+## Component Usage Examples
+
+### Button Component
+
+```html
+<!-- Primary button (default) -->
+<pure-button>Primary Button</pure-button>
+
+<!-- Secondary button -->
+<pure-button variant="secondary">Secondary Button</pure-button>
+
+<!-- Outline button -->
+<pure-button variant="outline">Outline Button</pure-button>
+
+<!-- Ghost button -->
+<pure-button variant="ghost">Ghost Button</pure-button>
+
+<!-- Destructive button -->
+<pure-button variant="destructive">Delete</pure-button>
+
+<!-- Different sizes -->
+<pure-button size="sm">Small Button</pure-button>
+<pure-button size="md">Medium Button</pure-button>
+<pure-button size="lg">Large Button</pure-button>
+<pure-button size="icon">🔍</pure-button>
+
+<!-- Disabled state -->
+<pure-button disabled>Disabled Button</pure-button>
+
+<!-- Loading state -->
+<pure-button loading>Loading</pure-button>
+```
+
+### Avatar Component
+
+```html
+<!-- Default avatar -->
+<pure-avatar src="https://github.com/user.png" alt="User"></pure-avatar>
+
+<!-- Different sizes -->
+<pure-avatar src="https://github.com/user.png" alt="User" size="sm"></pure-avatar>
+<pure-avatar src="https://github.com/user.png" alt="User" size="md"></pure-avatar>
+<pure-avatar src="https://github.com/user.png" alt="User" size="lg"></pure-avatar>
+<pure-avatar src="https://github.com/user.png" alt="User" size="xl"></pure-avatar>
+
+<!-- Different shapes -->
+<pure-avatar src="https://github.com/user.png" alt="User" shape="circle"></pure-avatar>
+<pure-avatar src="https://github.com/user.png" alt="User" shape="square"></pure-avatar>
+
+<!-- Fallback (shown when image fails to load) -->
+<pure-avatar fallback="JD" alt="John Doe"></pure-avatar>
+```
+
 ## Project Structure
 
 When initialized with TypeScript source files:
@@ -159,13 +234,21 @@ my-project/
             └── theme-provider.js # Theme utilities
 ```
 
-## Available Components
+## Testing the CLI
 
-- **Button**: Various styles and sizes for buttons
-- **Avatar**: User avatars with multiple options
-- **Theme Provider**: For consistent theming and dark mode
+To test the CLI functionality, you can use the included test script:
 
-More components will be added in future releases.
+```bash
+# Run the CLI tests
+node test-cli.js
+```
+
+This will:
+1. Create a test directory
+2. Run the help command
+3. List available components
+4. Add a component to the test directory
+5. Verify that the component was added correctly
 
 ## License
 
