@@ -6,16 +6,16 @@ describe('ButtonComponent', () => {
 
   beforeAll(() => {
     // Define the custom element if not already defined
-    if (!customElements.get('my-button')) {
-      customElements.define('my-button', ButtonComponent);
+    if (!customElements.get('pure-button')) {
+      customElements.define('pure-button', ButtonComponent);
     }
   });
 
   beforeEach(async () => {
-    button = document.createElement('my-button') as ButtonComponent;
+    button = document.createElement('pure-button') as ButtonComponent;
     document.body.appendChild(button);
     // Wait for custom element to be initialized
-    await customElements.whenDefined('my-button');
+    await customElements.whenDefined('pure-button');
     // Wait for next microtask to ensure shadow DOM is initialized
     await Promise.resolve();
   });

@@ -109,6 +109,6 @@ export class AvatarComponent extends HTMLElement {
 }
 
 // Register the component
-if (!customElements.get('my-avatar')) {
-  customElements.define('my-avatar', AvatarComponent);
+if (!customElements.get('pure-avatar')) {
+  customElements.define('pure-avatar', AvatarComponent);
 } 

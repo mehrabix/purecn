@@ -1,9 +1,9 @@
 import { baseCss, lightCss, darkCss } from './index';
 
-const BASE_STYLE_ID = 'shadcn-grid-theme-base';
-const LIGHT_STYLE_ID = 'shadcn-grid-theme-light';
-const DARK_STYLE_ID = 'shadcn-grid-theme-dark';
-const THEME_STORAGE_KEY = 'shadcn-grid-theme';
+const BASE_STYLE_ID = 'purecn-theme-base';
+const LIGHT_STYLE_ID = 'purecn-theme-light';
+const DARK_STYLE_ID = 'purecn-theme-dark';
+const THEME_STORAGE_KEY = 'purecn-theme';
 
 type Theme = 'light' | 'dark' | 'system';
 

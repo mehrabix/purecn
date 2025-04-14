@@ -116,8 +116,8 @@
             margin-top: 1rem;
         }
         
-        /* New shadcn-updates banner */
-        .shadcn-updates-banner {
+        /* New purecn-updates banner */
+        .purecn-updates-banner {
             background: linear-gradient(to right, var(--primary), var(--secondary));
             color: var(--primary-foreground);
             padding: 1rem;
@@ -175,7 +175,7 @@
 <body>
     <h1>Web Components Demo</h1>
     
-    <div class="shadcn-updates-banner">
+    <div class="purecn-updates-banner">
         Updated with the latest shadcn UI standards (January 2025)
     </div>
     
@@ -195,69 +195,69 @@
         <div class="section">
             <h3>Primary Buttons</h3>
             <div class="button-group">
-                <my-button variant="primary" size="sm">Small</my-button>
-                <my-button variant="primary" size="md">Medium</my-button>
-                <my-button variant="primary" size="lg">Large</my-button>
-                <my-button variant="primary" size="icon">
+                <pure-button variant="primary" size="sm">Small</pure-button>
+                <pure-button variant="primary" size="md">Medium</pure-button>
+                <pure-button variant="primary" size="lg">Large</pure-button>
+                <pure-button variant="primary" size="icon">
                     <span>+</span>
-                </my-button>
+                </pure-button>
             </div>
         </div>
 
         <div class="section">
             <h3>Secondary Buttons</h3>
             <div class="button-group">
-                <my-button variant="secondary" size="sm">Small</my-button>
-                <my-button variant="secondary" size="md">Medium</my-button>
-                <my-button variant="secondary" size="lg">Large</my-button>
-                <my-button variant="secondary" size="icon">
+                <pure-button variant="secondary" size="sm">Small</pure-button>
+                <pure-button variant="secondary" size="md">Medium</pure-button>
+                <pure-button variant="secondary" size="lg">Large</pure-button>
+                <pure-button variant="secondary" size="icon">
                     <span>?</span>
-                </my-button>
+                </pure-button>
             </div>
         </div>
 
         <div class="section">
             <h3>Outline Buttons</h3>
             <div class="button-group">
-                <my-button variant="outline" size="sm">Small</my-button>
-                <my-button variant="outline" size="md">Medium</my-button>
-                <my-button variant="outline" size="lg">Large</my-button>
-                <my-button variant="outline" size="icon">
+                <pure-button variant="outline" size="sm">Small</pure-button>
+                <pure-button variant="outline" size="md">Medium</pure-button>
+                <pure-button variant="outline" size="lg">Large</pure-button>
+                <pure-button variant="outline" size="icon">
                     <span>×</span>
-                </my-button>
+                </pure-button>
             </div>
         </div>
 
         <div class="section">
             <h3>Ghost Buttons</h3>
             <div class="button-group">
-                <my-button variant="ghost" size="sm">Small</my-button>
-                <my-button variant="ghost" size="md">Medium</my-button>
-                <my-button variant="ghost" size="lg">Large</my-button>
-                <my-button variant="ghost" size="icon">
+                <pure-button variant="ghost" size="sm">Small</pure-button>
+                <pure-button variant="ghost" size="md">Medium</pure-button>
+                <pure-button variant="ghost" size="lg">Large</pure-button>
+                <pure-button variant="ghost" size="icon">
                     <span>≡</span>
-                </my-button>
+                </pure-button>
             </div>
         </div>
 
         <div class="section">
             <h3>Link Buttons</h3>
             <div class="button-group">
-                <my-button variant="link" size="sm">Small</my-button>
-                <my-button variant="link" size="md">Medium</my-button>
-                <my-button variant="link" size="lg">Large</my-button>
+                <pure-button variant="link" size="sm">Small</pure-button>
+                <pure-button variant="link" size="md">Medium</pure-button>
+                <pure-button variant="link" size="lg">Large</pure-button>
             </div>
         </div>
 
         <div class="section">
             <h3>Destructive Buttons</h3>
             <div class="button-group">
-                <my-button variant="destructive" size="sm">Small</my-button>
-                <my-button variant="destructive" size="md">Medium</my-button>
-                <my-button variant="destructive" size="lg">Large</my-button>
-                <my-button variant="destructive" size="icon">
+                <pure-button variant="destructive" size="sm">Small</pure-button>
+                <pure-button variant="destructive" size="md">Medium</pure-button>
+                <pure-button variant="destructive" size="lg">Large</pure-button>
+                <pure-button variant="destructive" size="icon">
                     <span>🗑️</span>
-                </my-button>
+                </pure-button>
             </div>
         </div>
     </div>
@@ -268,53 +268,53 @@
         <div class="section">
             <h3>Disabled States</h3>
             <div class="button-group">
-                <my-button variant="primary" size="md" disabled>Primary Disabled</my-button>
-                <my-button variant="secondary" size="md" disabled>Secondary Disabled</my-button>
-                <my-button variant="outline" size="md" disabled>Outline Disabled</my-button>
-                <my-button variant="ghost" size="md" disabled>Ghost Disabled</my-button>
-                <my-button variant="link" size="md" disabled>Link Disabled</my-button>
-                <my-button variant="destructive" size="md" disabled>Destructive Disabled</my-button>
+                <pure-button variant="primary" size="md" disabled>Primary Disabled</pure-button>
+                <pure-button variant="secondary" size="md" disabled>Secondary Disabled</pure-button>
+                <pure-button variant="outline" size="md" disabled>Outline Disabled</pure-button>
+                <pure-button variant="ghost" size="md" disabled>Ghost Disabled</pure-button>
+                <pure-button variant="link" size="md" disabled>Link Disabled</pure-button>
+                <pure-button variant="destructive" size="md" disabled>Destructive Disabled</pure-button>
             </div>
         </div>
 
         <div class="section">
             <h3>Loading States (New)</h3>
             <div class="button-group">
-                <my-button variant="primary" size="md" loading>Primary Loading</my-button>
-                <my-button variant="secondary" size="md" loading>Secondary Loading</my-button>
-                <my-button variant="outline" size="md" loading>Outline Loading</my-button>
-                <my-button variant="ghost" size="md" loading>Ghost Loading</my-button>
-                <my-button variant="destructive" size="md" loading>Destructive Loading</my-button>
+                <pure-button variant="primary" size="md" loading>Primary Loading</pure-button>
+                <pure-button variant="secondary" size="md" loading>Secondary Loading</pure-button>
+                <pure-button variant="outline" size="md" loading>Outline Loading</pure-button>
+                <pure-button variant="ghost" size="md" loading>Ghost Loading</pure-button>
+                <pure-button variant="destructive" size="md" loading>Destructive Loading</pure-button>
             </div>
         </div>
 
         <div class="section">
             <h3>With Icons</h3>
             <div class="button-group">
-                <my-button variant="primary" size="md">
+                <pure-button variant="primary" size="md">
                     <span style="margin-right: 0.5rem;">🔍</span>
                     Search
-                </my-button>
-                <my-button variant="secondary" size="md">
+                </pure-button>
+                <pure-button variant="secondary" size="md">
                     <span style="margin-right: 0.5rem;">📝</span>
                     Edit
-                </my-button>
-                <my-button variant="outline" size="md">
+                </pure-button>
+                <pure-button variant="outline" size="md">
                     <span style="margin-right: 0.5rem;">➕</span>
                     Add
-                </my-button>
-                <my-button variant="ghost" size="md">
+                </pure-button>
+                <pure-button variant="ghost" size="md">
                     <span style="margin-right: 0.5rem;">👁️</span>
                     View
-                </my-button>
-                <my-button variant="link" size="md">
+                </pure-button>
+                <pure-button variant="link" size="md">
                     <span style="margin-right: 0.5rem;">🔗</span>
                     Link
-                </my-button>
-                <my-button variant="destructive" size="md">
+                </pure-button>
+                <pure-button variant="destructive" size="md">
                     <span style="margin-right: 0.5rem;">🗑️</span>
                     Delete
-                </my-button>
+                </pure-button>
             </div>
         </div>
     </div>
@@ -326,38 +326,38 @@
             <h3>Standard Sizes</h3>
             <div class="avatar-group">
                 <!-- Circle avatars with image -->
-                <my-avatar 
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="sm" 
                     shape="circle"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="md" 
                     shape="circle"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="lg" 
                     shape="circle"
-                ></my-avatar>
+                ></pure-avatar>
                 
                 <!-- New larger sizes -->
-                <my-avatar 
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="xl" 
                     shape="circle"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="2xl" 
                     shape="circle"
-                ></my-avatar>
+                ></pure-avatar>
             </div>
         </div>
         
@@ -365,30 +365,30 @@
             <h3>Square Shape</h3>
             <div class="avatar-group">
                 <!-- Square avatars -->
-                <my-avatar 
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="sm" 
                     shape="square"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="md" 
                     shape="square"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="lg" 
                     shape="square"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="shadcn" 
                     size="xl" 
                     shape="square"
-                ></my-avatar>
+                ></pure-avatar>
             </div>
         </div>
         
@@ -396,65 +396,65 @@
             <h3>Fallback Examples</h3>
             <div class="avatar-group">
                 <!-- Fallback examples -->
-                <my-avatar 
+                <pure-avatar 
                     alt="John Doe" 
                     size="md" 
                     shape="circle"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     alt="Jane Smith" 
                     size="md" 
                     shape="circle"
                     fallback="JS"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     alt="Shadcn UI" 
                     size="lg" 
                     shape="circle"
                     fallback="UI"
-                ></my-avatar>
+                ></pure-avatar>
             </div>
         </div>
         
         <div class="section">
             <h3>Status Indicators (New)</h3>
             <div class="avatar-group">
-                <my-avatar 
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="Online User" 
                     size="md" 
                     shape="circle"
                     status="online"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="Busy User" 
                     size="md" 
                     shape="circle"
                     status="busy"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="Away User" 
                     size="md" 
                     shape="circle"
                     status="away"
-                ></my-avatar>
-                <my-avatar 
+                ></pure-avatar>
+                <pure-avatar 
                     src="https://github.com/shadcn.png" 
                     alt="Offline User" 
                     size="md" 
                     shape="circle"
                     status="offline"
-                ></my-avatar>
+                ></pure-avatar>
                 
                 <!-- Fallback with status -->
-                <my-avatar 
+                <pure-avatar 
                     alt="John Doe" 
                     size="lg" 
                     shape="circle"
                     status="online"
-                ></my-avatar>
+                ></pure-avatar>
             </div>
         </div>
     </div>
@@ -463,25 +463,25 @@
         <h3>Usage Examples</h3>
         <pre>
 &lt;!-- Button with icon size (new) --&gt;
-&lt;my-button variant="outline" size="icon"&gt;+&lt;/my-button&gt;
+&lt;pure-button variant="outline" size="icon"&gt;+&lt;/pure-button&gt;
 
 &lt;!-- Loading button (new) --&gt;
-&lt;my-button variant="primary" loading&gt;Loading&lt;/my-button&gt;
+&lt;pure-button variant="primary" loading&gt;Loading&lt;/pure-button&gt;
 
 &lt;!-- Avatar with status (new) --&gt;
-&lt;my-avatar 
+&lt;pure-avatar 
     src="https://github.com/shadcn.png" 
     alt="User" 
     size="md" 
     status="online"
-&gt;&lt;/my-avatar&gt;
+&gt;&lt;/pure-avatar&gt;
 
 &lt;!-- Avatar with new sizes (new) --&gt;
-&lt;my-avatar 
+&lt;pure-avatar 
     src="https://github.com/shadcn.png" 
     alt="User" 
     size="2xl"
-&gt;&lt;/my-avatar&gt;
+&gt;&lt;/pure-avatar&gt;
         </pre>
     </div>
 </body>

@@ -70,6 +70,6 @@ export class ButtonComponent extends HTMLElement {
 }
 
 // Register the component
-if (!customElements.get('my-button')) {
-  customElements.define('my-button', ButtonComponent);
+if (!customElements.get('pure-button')) {
+  customElements.define('pure-button', ButtonComponent);
 } 

@@ -6,16 +6,16 @@ describe('AvatarComponent', () => {
 
   beforeAll(() => {
     // Define the custom element if not already defined
-    if (!customElements.get('my-avatar')) {
-      customElements.define('my-avatar', AvatarComponent);
+    if (!customElements.get('pure-avatar')) {
+      customElements.define('pure-avatar', AvatarComponent);
     }
   });
 
   beforeEach(async () => {
-    avatar = document.createElement('my-avatar') as AvatarComponent;
+    avatar = document.createElement('pure-avatar') as AvatarComponent;
     document.body.appendChild(avatar);
     // Wait for custom element to be initialized
-    await customElements.whenDefined('my-avatar');
+    await customElements.whenDefined('pure-avatar');
     // Wait for next microtask to ensure shadow DOM is initialized
     await Promise.resolve();
   });
