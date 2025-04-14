@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureCN Basic Example</title>
+  <style>
+    :root {
+      --background: #ffffff;
+      --foreground: #000000;
+      --card: #ffffff;
+      --card-foreground: #000000;
+      --border: #e5e7eb;
+      --primary: #0070f3;
+      --primary-foreground: #ffffff;
+      --secondary: #f5f5f5;
+      --secondary-foreground: #000000;
+      --muted: #f5f5f5;
+      --muted-foreground: #6b7280;
+      --accent: #f5f5f5;
+      --accent-foreground: #000000;
+      --destructive: #ff4a4a;
+      --destructive-foreground: #ffffff;
+    }
+
+    .dark {
+      --background: #121212;
+      --foreground: #ffffff;
+      --card: #1e1e1e;
+      --card-foreground: #ffffff;
+      --border: #333333;
+      --primary: #0070f3;
+      --primary-foreground: #ffffff;
+      --secondary: #2d2d2d;
+      --secondary-foreground: #ffffff;
+      --muted: #2d2d2d;
+      --muted-foreground: #a1a1aa;
+      --accent: #2d2d2d;
+      --accent-foreground: #ffffff;
+      --destructive: #ff4a4a;
+      --destructive-foreground: #ffffff;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: var(--background);
+      color: var(--foreground);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .component-group {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background-color: var(--card);
+      color: var(--card-foreground);
+    }
+    
+    h1, h2 {
+      color: var(--foreground);
+    }
+    
+    h2 {
+      margin-top: 0;
+    }
+    
+    h3 {
+      color: var(--muted-foreground);
+    }
+    
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .avatar-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    /* Theme toggle styling */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .theme-toggle-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      color: var(--foreground);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-toggle-btn:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+    
+    .theme-toggle-btn.active {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+  </style>
+  <!-- Import components directly from CDN for simplicity -->
+  <script type="importmap">
+    {
+      "imports": {
+        "purecn": "https://unpkg.com/purecn@1.0.1/index.js",
+        "purecn/components/": "https://unpkg.com/purecn@1.0.1/dist/components/"
+      }
+    }
+  </script>
+  <script type="module">
+    // Import components and apply theme
+    import { applyThemes } from 'purecn/components/theme/theme-provider.js';
+    
+    // Initialize theme support
+    window.addEventListener('DOMContentLoaded', () => {
+      applyThemes();
+    });
+  </script>
+  <script type="module" src="https://unpkg.com/purecn@1.0.1/dist/components/button/button.js"></script>
+  <script type="module" src="https://unpkg.com/purecn@1.0.1/dist/components/avatar/avatar.js"></script>
+</head>
+<body>
+  <div class="theme-toggle">
+    <button id="set-light" class="theme-toggle-btn">Light</button>
+    <button id="set-dark" class="theme-toggle-btn">Dark</button>
+  </div>
+
+  <h1>PureCN Web Components</h1>
+  <p>Simple demo of web components from the PureCN library. These components are loaded directly from the CDN.</p>
+  
+  <div class="container">
+    <div class="component-group">
+      <h2>Button Component</h2>
+      <div class="button-group">
+        <pure-button variant="primary">Primary Button</pure-button>
+        <pure-button variant="secondary">Secondary Button</pure-button>
+        <pure-button variant="destructive">Destructive Button</pure-button>
+        <pure-button variant="outline">Outline Button</pure-button>
+        <pure-button variant="ghost">Ghost Button</pure-button>
+        <pure-button variant="link">Link Button</pure-button>
+      </div>
+      
+      <h3>Button Sizes</h3>
+      <div class="button-group">
+        <pure-button size="sm" variant="primary">Small Button</pure-button>
+        <pure-button size="default" variant="primary">Default Button</pure-button>
+        <pure-button size="lg" variant="primary">Large Button</pure-button>
+      </div>
+    </div>
+    
+    <div class="component-group">
+      <h2>Avatar Component</h2>
+      <div class="avatar-group">
+        <pure-avatar 
+          src="https://github.com/shadcn.png" 
+          alt="Avatar" 
+          size="sm"
+          shape="circle">
+        </pure-avatar>
+        
+        <pure-avatar 
+          src="https://github.com/shadcn.png" 
+          alt="Avatar" 
+          size="md"
+          shape="circle">
+        </pure-avatar>
+        
+        <pure-avatar 
+          src="https://github.com/shadcn.png" 
+          alt="Avatar" 
+          size="lg"
+          shape="circle">
+        </pure-avatar>
+        
+        <pure-avatar 
+          src="https://github.com/shadcn.png" 
+          alt="Avatar" 
+          size="md"
+          shape="square">
+        </pure-avatar>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize theme based on user's preference
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      document.getElementById('set-dark').classList.add('active');
+    } else {
+      document.getElementById('set-light').classList.add('active');
+    }
+    
+    // Theme toggle functionality
+    document.getElementById('set-light').addEventListener('click', () => {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      document.getElementById('set-light').classList.add('active');
+      document.getElementById('set-dark').classList.remove('active');
+    });
+    
+    document.getElementById('set-dark').addEventListener('click', () => {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      document.getElementById('set-dark').classList.add('active');
+      document.getElementById('set-light').classList.remove('active');
+    });
+  </script>
+</body>
+</html> 

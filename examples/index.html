@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureCN Examples</title>
+  <style>
+    :root {
+      --background: #ffffff;
+      --foreground: #000000;
+      --card: #ffffff;
+      --card-foreground: #000000;
+      --border: #e5e7eb;
+      --primary: #0070f3;
+      --primary-foreground: #ffffff;
+      --secondary: #f5f5f5;
+      --secondary-foreground: #000000;
+      --muted: #f5f5f5;
+      --muted-foreground: #6b7280;
+      --accent: #f5f5f5;
+      --accent-foreground: #000000;
+      --destructive: #ff4a4a;
+      --destructive-foreground: #ffffff;
+    }
+
+    .dark {
+      --background: #121212;
+      --foreground: #ffffff;
+      --card: #1e1e1e;
+      --card-foreground: #ffffff;
+      --border: #333333;
+      --primary: #0070f3;
+      --primary-foreground: #ffffff;
+      --secondary: #2d2d2d;
+      --secondary-foreground: #ffffff;
+      --muted: #2d2d2d;
+      --muted-foreground: #a1a1aa;
+      --accent: #2d2d2d;
+      --accent-foreground: #ffffff;
+      --destructive: #ff4a4a;
+      --destructive-foreground: #ffffff;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: var(--background);
+      color: var(--foreground);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    h1 {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+    
+    .example-link {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: block;
+      text-decoration: none;
+      color: var(--card-foreground);
+      background-color: var(--card);
+      transition: all 0.2s ease;
+    }
+    
+    .example-link:hover {
+      background-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+      margin-top: 1.5rem;
+      color: var(--foreground);
+    }
+    
+    h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+    
+    p {
+      margin-bottom: 0;
+      color: var(--foreground);
+    }
+    
+    pre {
+      background-color: var(--muted);
+      color: var(--muted-foreground);
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    
+    code {
+      font-family: monospace;
+    }
+    
+    /* Theme toggle styling */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .theme-toggle-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      color: var(--foreground);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-toggle-btn:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+    
+    .theme-toggle-btn.active {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle">
+    <button id="set-light" class="theme-toggle-btn">Light</button>
+    <button id="set-dark" class="theme-toggle-btn">Dark</button>
+  </div>
+
+  <h1>PureCN Web Components Examples</h1>
+  <p>
+    These examples demonstrate different ways to use the PureCN web components library.
+    Click on any example to see it in action.
+  </p>
+  
+  <a href="basic-usage/index.html" class="example-link">
+    <h3>Basic Usage Example</h3>
+    <p>Shows how to use PureCN components directly from the CDN with simple imports.</p>
+  </a>
+  
+  <a href="custom-components/index.html" class="example-link">
+    <h3>Custom Components Example</h3>
+    <p>Demonstrates using components copied locally via the CLI and customized with CSS.</p>
+  </a>
+  
+  <a href="source-components/index.html" class="example-link">
+    <h3>Extensibility Example</h3>
+    <p>Shows how to extend components programmatically with custom JavaScript.</p>
+  </a>
+  
+  <h2>Getting Started with PureCN</h2>
+  <pre><code># Install globally
+npm install -g purecn
+
+# Initialize in your project
+purecn init ./my-project
+
+# Add specific components
+purecn components add button ./my-project</code></pre>
+  
+  <p>
+    <strong>Note:</strong> The source example in this demo couldn't properly demonstrate TypeScript source modification
+    since we're using a published package. In a real scenario, users would be able to modify the TypeScript source
+    and build custom components.
+  </p>
+
+  <script>
+    // Initialize theme based on user's preference
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      document.getElementById('set-dark').classList.add('active');
+    } else {
+      document.getElementById('set-light').classList.add('active');
+    }
+    
+    // Theme toggle functionality
+    document.getElementById('set-light').addEventListener('click', () => {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      document.getElementById('set-light').classList.add('active');
+      document.getElementById('set-dark').classList.remove('active');
+    });
+    
+    document.getElementById('set-dark').addEventListener('click', () => {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      document.getElementById('set-dark').classList.add('active');
+      document.getElementById('set-light').classList.remove('active');
+    });
+  </script>
+</body>
+</html>

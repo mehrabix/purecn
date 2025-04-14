@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureCN Source Extensibility Example</title>
+  <style>
+    :root {
+      --background: #ffffff;
+      --foreground: #000000;
+      --card: #ffffff;
+      --card-foreground: #000000;
+      --border: #e5e7eb;
+      --primary: #0070f3;
+      --primary-foreground: #ffffff;
+      --secondary: #f5f5f5;
+      --secondary-foreground: #000000;
+      --muted: #f5f5f5;
+      --muted-foreground: #6b7280;
+      --accent: #f5f5f5;
+      --accent-foreground: #000000;
+      --destructive: #ff4a4a;
+      --destructive-foreground: #ffffff;
+    }
+
+    .dark {
+      --background: #121212;
+      --foreground: #ffffff;
+      --card: #1e1e1e;
+      --card-foreground: #ffffff;
+      --border: #333333;
+      --primary: #0070f3;
+      --primary-foreground: #ffffff;
+      --secondary: #2d2d2d;
+      --secondary-foreground: #ffffff;
+      --muted: #2d2d2d;
+      --muted-foreground: #a1a1aa;
+      --accent: #2d2d2d;
+      --accent-foreground: #ffffff;
+      --destructive: #ff4a4a;
+      --destructive-foreground: #ffffff;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: var(--background);
+      color: var(--foreground);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .component-group {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background-color: var(--card);
+      color: var(--card-foreground);
+    }
+    
+    h1, h2 {
+      color: var(--foreground);
+    }
+    
+    h2 {
+      margin-top: 0;
+    }
+    
+    h3 {
+      color: var(--muted-foreground);
+    }
+    
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .avatar-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    /* Custom extended styles */
+    .btn-gradient {
+      background: linear-gradient(45deg, #ff6b6b, #feca57) !important;
+      color: white !important;
+      border: none !important;
+    }
+    
+    .avatar-glow {
+      box-shadow: 0 0 10px #ff6b6b !important;
+    }
+    
+    /* Code block styling */
+    pre {
+      background-color: var(--muted);
+      color: var(--muted-foreground);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 0;
+    }
+    
+    code {
+      font-family: monospace;
+    }
+    
+    button {
+      padding: 0.5rem 1rem;
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    button:hover {
+      opacity: 0.9;
+    }
+    
+    /* Theme toggle styling */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .theme-toggle-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      color: var(--foreground);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-toggle-btn:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+    
+    .theme-toggle-btn.active {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle">
+    <button id="set-light" class="theme-toggle-btn">Light</button>
+    <button id="set-dark" class="theme-toggle-btn">Dark</button>
+  </div>
+
+  <h1>PureCN Extensibility Example</h1>
+  <p>This example demonstrates how to extend components with custom JavaScript code and CSS styles.</p>
+  
+  <div class="container">
+    <div class="component-group">
+      <h2>Custom Extended Button</h2>
+      <div class="button-group">
+        <button id="add-button">Create Gradient Button</button>
+      </div>
+      <div id="button-container" class="button-group" style="margin-top: 1rem;"></div>
+      
+      <h3>How it Works</h3>
+      <p>This example dynamically creates a PureCN button and applies custom CSS classes to it.</p>
+      <pre><code>
+// Create a new button
+const button = document.createElement('pure-button');
+button.textContent = 'Custom Gradient Button';
+button.setAttribute('variant', 'primary');
+button.classList.add('btn-gradient');
+      </code></pre>
+    </div>
+    
+    <div class="component-group">
+      <h2>Extended Avatar Example</h2>
+      <div id="avatar-container" class="avatar-group"></div>
+      <button id="add-avatar">Create Glowing Avatar</button>
+      
+      <h3>How it Works</h3>
+      <p>This example creates an avatar component with custom styles applied programmatically.</p>
+    </div>
+  </div>
+  
+  <!-- Load the PureCN components from CDN -->
+  <script type="module">
+    import 'https://unpkg.com/purecn@1.0.1/dist/components/button/button.js';
+    import 'https://unpkg.com/purecn@1.0.1/dist/components/avatar/avatar.js';
+    
+    // Wait for custom elements to be defined
+    customElements.whenDefined('pure-button').then(() => {
+      // Add event listener for creating custom buttons
+      document.getElementById('add-button').addEventListener('click', createGradientButton);
+    });
+    
+    customElements.whenDefined('pure-avatar').then(() => {
+      // Add event listener for creating custom avatars
+      document.getElementById('add-avatar').addEventListener('click', createGlowingAvatar);
+    });
+    
+    function createGradientButton() {
+      // Create a new button with custom styles
+      const button = document.createElement('pure-button');
+      button.textContent = 'Custom Gradient Button';
+      button.setAttribute('variant', 'primary');
+      button.classList.add('btn-gradient');
+      
+      // Add to container
+      document.getElementById('button-container').appendChild(button);
+    }
+    
+    function createGlowingAvatar() {
+      // Create a new avatar with custom styles
+      const avatar = document.createElement('pure-avatar');
+      avatar.setAttribute('src', 'https://github.com/shadcn.png');
+      avatar.setAttribute('alt', 'Custom Avatar');
+      avatar.setAttribute('size', 'md');
+      avatar.setAttribute('shape', 'circle');
+      avatar.classList.add('avatar-glow');
+      
+      // Add to container
+      document.getElementById('avatar-container').appendChild(avatar);
+    }
+  </script>
+  
+  <script>
+    // Initialize theme based on user's preference
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      document.getElementById('set-dark').classList.add('active');
+    } else {
+      document.getElementById('set-light').classList.add('active');
+    }
+    
+    // Theme toggle functionality
+    document.getElementById('set-light').addEventListener('click', () => {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      document.getElementById('set-light').classList.add('active');
+      document.getElementById('set-dark').classList.remove('active');
+    });
+    
+    document.getElementById('set-dark').addEventListener('click', () => {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      document.getElementById('set-dark').classList.add('active');
+      document.getElementById('set-light').classList.remove('active');
+    });
+  </script>
+</body>
+</html> 

@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "bin": {
-    "purecn": "./dist/cli/index.js"
+    "purecn": "dist/cli/index.js"
   },
   "exports": {
     ".": "./index.js",
@@ -61,6 +61,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/purecn"
+    "url": "git+https://github.com/yourusername/purecn.git"
   }
 }
