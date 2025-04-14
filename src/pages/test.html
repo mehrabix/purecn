@@ -9,59 +9,48 @@
     <script type="module">
         async function testThemeProviders() {
             try {
-                // Method 1: Legacy path (for backwards compatibility)
-                console.log('Testing legacy theme provider path...');
-                const legacyThemeProvider = await import('../../dist/theme-provider.min.js');
+                // Theme provider is now correctly located in the components/theme folder
+                console.log('Testing theme provider...');
+                const themeProvider = await import('../../dist/components/theme/theme-provider.min.js');
                 
-                if (legacyThemeProvider && legacyThemeProvider.applyThemes) {
-                    console.log('Legacy theme provider loaded successfully');
-                    legacyThemeProvider.applyThemes();
+                if (themeProvider && themeProvider.applyThemes) {
+                    console.log('Theme provider loaded successfully');
+                    themeProvider.applyThemes();
                     
                     // Apply dark theme
-                    legacyThemeProvider.setTheme('dark');
-                    console.log('Dark theme applied via legacy provider');
+                    themeProvider.setTheme('dark');
+                    console.log('Dark theme applied via provider');
                     
-                    // Test Method 2 after a short delay
-                    setTimeout(async () => {
+                    // Test theme switching after a short delay
+                    setTimeout(() => {
                         try {
-                            // Method 2: New path (proper location)
-                            console.log('Testing new theme provider path...');
-                            const newThemeProvider = await import('../../dist/components/theme/theme-provider.min.js');
+                            // Test by switching theme
+                            themeProvider.setTheme('light');
+                            console.log('Light theme applied');
                             
-                            if (newThemeProvider && newThemeProvider.applyThemes) {
-                                console.log('New theme provider loaded successfully');
-                                // Test by switching theme
-                                newThemeProvider.setTheme('light');
-                                console.log('Light theme applied via new provider');
+                            // Switch back to dark after 1 second for demo
+                            setTimeout(() => {
+                                themeProvider.setTheme('dark');
+                                console.log('Dark theme re-applied');
                                 
-                                // Switch back to dark after 1 second for demo
-                                setTimeout(() => {
-                                    newThemeProvider.setTheme('dark');
-                                    console.log('Dark theme re-applied via new provider');
-                                    
-                                    document.getElementById('theme-status').textContent = 
-                                        'Theme Provider: ✅ Both paths working correctly';
-                                }, 1000);
-                            } else {
-                                console.error('New theme provider not found');
                                 document.getElementById('theme-status').textContent = 
-                                    'Theme Provider: ❌ New path failed';
-                            }
+                                    'Theme Provider: ✅ Working correctly';
+                            }, 1000);
                         } catch (error) {
-                            console.error('Failed to load new theme provider:', error);
+                            console.error('Failed to toggle theme:', error);
                             document.getElementById('theme-status').textContent = 
-                                'Theme Provider: ❌ New path error: ' + error.message;
+                                'Theme Provider: ❌ Theme toggle error: ' + error.message;
                         }
                     }, 1000);
                 } else {
-                    console.error('Legacy theme provider or applyThemes function not found');
+                    console.error('Theme provider or applyThemes function not found');
                     document.getElementById('theme-status').textContent = 
-                        'Theme Provider: ❌ Legacy path failed';
+                        'Theme Provider: ❌ Function not found';
                 }
             } catch (error) {
-                console.error('Failed to load legacy theme provider:', error);
+                console.error('Failed to load theme provider:', error);
                 document.getElementById('theme-status').textContent = 
-                    'Theme Provider: ❌ Legacy path error: ' + error.message;
+                    'Theme Provider: ❌ Import error: ' + error.message;
             }
         }
         

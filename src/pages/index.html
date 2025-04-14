@@ -9,7 +9,7 @@
     <script type="module">
         try {
             // Import the CORRECT provider bundle
-            const themeProvider = await import('../../dist/theme-provider.min.js'); 
+            const themeProvider = await import('../../dist/components/theme/theme-provider.min.js'); 
             if (themeProvider && themeProvider.applyThemes) {
                 themeProvider.applyThemes(); // Apply themes immediately
                 
@@ -134,7 +134,7 @@
     <script type="module">
         try {
             // Import the CORRECT provider bundle
-            const themeProvider = await import('../../dist/theme-provider.min.js'); 
+            const themeProvider = await import('../../dist/components/theme/theme-provider.min.js'); 
             if (themeProvider && themeProvider.setTheme) {
                 const setLightBtn = document.getElementById('set-light');
                 const setDarkBtn = document.getElementById('set-dark');
