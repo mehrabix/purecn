@@ -18,8 +18,10 @@
     "test:watch": "jest --watch",
     "clean": "rimraf dist",
     "types": "tsc --project tsconfig.declaration.json",
-    "build": "pnpm test && pnpm clean && rspack build --config rspack.config.cjs && pnpm types && node scripts/build-cli.js",
-    "dev": "rspack serve --config rspack.config.cjs --watch"
+    "build": "pnpm test && pnpm clean && rspack build --config rspack.config.cjs --mode=production && pnpm types && node scripts/build-cli.js",
+    "dev": "rspack serve --config rspack.config.cjs --mode=development",
+    "analyze": "rspack build --mode=production --analyze"
+
   },
   "keywords": [
     "web-components",

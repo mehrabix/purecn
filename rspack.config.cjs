@@ -4,6 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const zlib = require('zlib');
 
 const rootDir = path.resolve(__dirname);
+const isProduction = process.env.NODE_ENV === "production";
 
 // Get component entries
 const getEntries = () => {
@@ -125,10 +126,15 @@ const config = {
         publicPath: '/dist',
       }
     ],
-    port: 3000,
+    compress: isProduction,
+    port: 9000,
     hot: true,
-    open: true,
-    watchFiles: ['src/pages/**/*'],
+    liveReload: false,
+    watchFiles: ["src/**/*"],
+    historyApiFallback: true,
+    devMiddleware: {
+      writeToDisk: false,
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
@@ -173,7 +179,8 @@ const config = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.css', '.scss'],
   },
-  mode: 'production',
+  mode: isProduction ? "production" : "development",
+  devtool: isProduction ? false : "source-map",
   plugins: [
     {
       name: 'compression-plugin',
