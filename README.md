@@ -37,9 +37,7 @@ Then open your browser to [http://localhost:9000](http://localhost:9000) to see 
 ### Other Scripts
 
 - `npm run build` - Build the library for production
-- `npm start` - Alias for `npm run dev`
 - `npm run dev` - Start the development server with the custom Node script
-- `npm run dev:rspack` - Start development server directly with rspack
 - `npm test` - Run the test suite
 - `npm run verify` - Verify project structure
 - `npm run analyze` - Analyze bundle sizes
