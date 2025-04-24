@@ -7,13 +7,17 @@ type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 
 export class ButtonComponent extends BaseComponent {
   static override styles: string = '';
+  
+  // Theme change listener
+  private themeChangeListener: ((e: Event) => void) | null = null;
 
   static {
+    // Make sure styles is properly assigned
+    ButtonComponent.styles = typeof styles === 'string' ? styles : '';
     if (typeof styles === 'string') {
-      ButtonComponent.styles = styles;
-      console.log('Button styles loaded from SCSS:', styles.substring(0, 100) + '...');
+      console.log('Button styles loaded from SCSS:', styles.slice(0, 100) + '...');
     } else {
-      console.error('Button styles not loaded correctly:', typeof styles, styles);
+      console.error('Button styles not loaded correctly:', typeof styles);
     }
   }
 
@@ -21,6 +25,29 @@ export class ButtonComponent extends BaseComponent {
     super();
     // Add data-instance-id for HMR targeting
     this.setAttribute('data-instance-id', this.uniqueSelector.split('"')[1]);
+    
+    // Setup theme change listener
+    this.themeChangeListener = this.handleThemeChange.bind(this);
+  }
+  
+  connectedCallback() {
+    // Add event listener for theme changes
+    document.addEventListener('purecn-theme-change', this.themeChangeListener as EventListener);
+  }
+  
+  disconnectedCallback() {
+    // Remove event listener when component is removed from DOM
+    if (this.themeChangeListener) {
+      document.removeEventListener('purecn-theme-change', this.themeChangeListener as EventListener);
+    }
+  }
+  
+  /**
+   * Handle theme changes
+   */
+  private handleThemeChange(e: Event) {
+    console.log('Button: Theme change detected, re-rendering');
+    this.render();
   }
 
   static get observedAttributes() {
@@ -50,10 +77,17 @@ export class ButtonComponent extends BaseComponent {
   }
 
   protected override render() {
-    console.log('Rendering button with styles:', ButtonComponent.styles.substring(0, 50) + '...');
+    const stylesPreview = ButtonComponent.styles && ButtonComponent.styles.length > 0 
+      ? ButtonComponent.styles.slice(0, 50) + '...' 
+      : 'empty styles';
+    console.log('Rendering button with styles:', stylesPreview);
     
-    // Update styles
-    this.updateStyles(ButtonComponent.styles);
+    // Make sure to use the correct styles from the static property
+    if (ButtonComponent.styles) {
+      this.updateStyles(ButtonComponent.styles);
+    } else {
+      console.error('Button styles are empty or not loaded correctly');
+    }
     
     const loadingContent = this.loading ? '<span class="spinner"></span>' : '';
     
@@ -72,9 +106,12 @@ export class ButtonComponent extends BaseComponent {
   }
 }
 
-// Register the component
-if (!customElements.get('pure-button')) {
-  customElements.define('pure-button', ButtonComponent);
+// Register the custom element if we're in a browser environment
+if (typeof window !== 'undefined' && typeof customElements !== 'undefined') {
+  // Check if the element is already defined before trying to register it
+  if (!customElements.get('pure-button')) {
+    customElements.define('pure-button', ButtonComponent);
+  }
 }
 
 // Support HMR

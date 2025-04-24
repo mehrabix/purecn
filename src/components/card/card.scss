@@ -8,7 +8,8 @@
   display: flex;
   flex-direction: column;
   border-radius: var(--card-radius);
-  background-color: var(--card, var(--background, #fff));
+  background-color: hsl(var(--card-hsl));
+  color: hsl(var(--card-foreground-hsl));
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   transition: 
     background-color 0.2s ease,
@@ -27,27 +28,13 @@
   &.outline {
     background-color: transparent;
     box-shadow: none;
-    border: var(--card-border-width) solid var(--border, #e2e8f0);
+    border: var(--card-border-width) solid hsl(var(--border-hsl));
   }
 
   &.ghost {
     background-color: transparent;
     box-shadow: none;
     border: none;
-  }
-
-  // Dark mode adjustments via host context
-  :host-context(.dark) & {
-    background-color: var(--card, var(--background, #1e293b));
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
-    
-    &.outline {
-      border-color: var(--border, #334155);
-    }
-    
-    &.hover:hover {
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    }
   }
 }
 

@@ -230,10 +230,11 @@ const config = {
         `${pathData.chunk.name.replace('.min', '')}.min.js` : 
         `${pathData.chunk.name}.js`;
     },
-    library: {
-      type: isProduction ? 'module' : 'umd',
-    },
-    globalObject: 'this',
+    library: isProduction 
+      ? { type: 'module' }
+      : { type: 'umd', name: 'purecn' },
+    publicPath: '/',
+    globalObject: 'window',
     environment: {
       module: true,
       dynamicImport: true
@@ -282,14 +283,14 @@ const config = {
         publicPath: '/',
       },
       {
-        directory: path.join(__dirname, 'dist'),
-        publicPath: '/dist',
+        directory: path.join(__dirname, 'dist/components'),
+        publicPath: '/components',
       }
     ],
-    compress: isProduction,
+    compress: false, // Disable compression for faster development
     port: 9000,
     hot: true,
-    liveReload: false,
+    liveReload: true, // Enable live reload for better HMR experience
     watchFiles: {
       paths: ["src/**/*"],
       options: {
@@ -300,6 +301,7 @@ const config = {
     historyApiFallback: true,
     devMiddleware: {
       writeToDisk: true,
+      stats: 'minimal', // Show minimal stats output
     },
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -380,17 +382,16 @@ const config = {
         });
       }
     },
-    // HMR Plugin for web components
-    {
+    // Simplified HMR Plugin for web components
+    !isProduction && {
       name: 'web-components-hmr-plugin',
       apply(compiler) {
-        if (!isProduction) {
-          compiler.hooks.compilation.tap('WebComponentsHMRPlugin', (compilation) => {
-            compilation.hooks.finishModules.tap('WebComponentsHMRPlugin', () => {
-              console.log('HMR ready for web components');
-            });
-          });
-        }
+        // Only log HMR is ready
+        compiler.hooks.done.tap('WebComponentsHMRPlugin', (stats) => {
+          if (!stats.hasErrors()) {
+            console.log('HMR ready for web components');
+          }
+        });
       }
     },
     // Post-process plugin for compression, indexing, etc.

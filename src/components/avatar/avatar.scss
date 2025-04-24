@@ -4,8 +4,8 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: var(--muted);
-  color: var(--muted-foreground);
+  background-color: hsl(var(--muted-hsl));
+  color: hsl(var(--muted-foreground-hsl));
   font-weight: 500;
   transition: transform 0.2s, opacity 0.2s;
   flex-shrink: 0;
@@ -78,22 +78,22 @@
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 50%;
-    border: 2px solid var(--background);
+    border: 2px solid hsl(var(--background-hsl));
     
     &.online {
-      background-color: var(--success, #22c55e);
+      background-color: #22c55e; /* Success green */
     }
     
     &.offline {
-      background-color: var(--muted, #a1a1aa);
+      background-color: hsl(var(--muted-hsl));
     }
     
     &.busy {
-      background-color: var(--destructive, #ef4444);
+      background-color: hsl(var(--destructive-hsl));
     }
     
     &.away {
-      background-color: var(--warning, #f59e0b);
+      background-color: #f59e0b; /* Warning yellow */
     }
   }
   
@@ -107,7 +107,7 @@
 
   // Focus state
   &:focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid hsl(var(--ring-hsl));
     outline-offset: 2px;
   }
 } 

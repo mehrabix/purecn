@@ -9,7 +9,7 @@
   justify-content: center;
   border-radius: var(--radius);
   font-weight: 500;
-  cursor: default;
+  cursor: pointer;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out, opacity 0.15s ease-in-out, transform 0.1s ease-out;
   border: 1px solid transparent;
   outline: none;
@@ -21,17 +21,17 @@
   gap: 0.5rem;
 
   &:focus-visible {
-    outline: 2px solid var(--ring);
+    outline: 2px solid hsl(var(--ring-hsl));
     outline-offset: 2px;
   }
 
   // Variants
   &.primary {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-    border-color: var(--primary);
+    background-color: hsl(var(--primary-hsl));
+    color: hsl(var(--primary-foreground-hsl));
+    border-color: hsl(var(--primary-hsl));
     &:hover:not(:disabled) {
-      background-color: var(--primary);
+      background-color: hsl(var(--primary-hsl));
       opacity: 0.9;
     }
     &:active:not(:disabled) {
@@ -40,11 +40,11 @@
   }
 
   &.secondary {
-    background-color: var(--secondary);
-    color: var(--secondary-foreground);
-    border-color: var(--secondary);
+    background-color: hsl(var(--secondary-hsl));
+    color: hsl(var(--secondary-foreground-hsl));
+    border-color: hsl(var(--secondary-hsl));
     &:hover:not(:disabled) {
-      background-color: var(--secondary);
+      background-color: hsl(var(--secondary-hsl));
       opacity: 0.9;
     }
     &:active:not(:disabled) {
@@ -54,29 +54,29 @@
 
   &.outline {
     background-color: transparent;
-    border: 1px solid var(--border);
-    color: var(--foreground);
+    border: 1px solid hsl(var(--border-hsl));
+    color: hsl(var(--foreground-hsl));
     
     &:hover:not(:disabled) {
-      background-color: var(--accent);
-      color: var(--accent-foreground);
+      background-color: hsl(var(--accent-hsl));
+      color: hsl(var(--accent-foreground-hsl));
       border-color: transparent;
     }
     
     &:active:not(:disabled) {
-      background-color: var(--accent);
-      color: var(--accent-foreground);
+      background-color: hsl(var(--accent-hsl));
+      color: hsl(var(--accent-foreground-hsl));
       border-color: transparent;
       opacity: 0.9;
     }
   }
 
   &.destructive {
-    background-color: var(--destructive);
-    color: var(--destructive-foreground);
-    border-color: var(--destructive);
+    background-color: hsl(var(--destructive-hsl));
+    color: hsl(var(--destructive-foreground-hsl));
+    border-color: hsl(var(--destructive-hsl));
     &:hover:not(:disabled) {
-      background-color: var(--destructive);
+      background-color: hsl(var(--destructive-hsl));
       opacity: 0.9;
     }
     &:active:not(:disabled) {
@@ -87,15 +87,15 @@
   &.ghost {
     background-color: transparent;
     border-color: transparent;
-    color: var(--foreground);
+    color: hsl(var(--foreground-hsl));
     
     &:hover:not(:disabled) {
-      background-color: var(--accent);
-      color: var(--accent-foreground);
+      background-color: hsl(var(--accent-hsl));
+      color: hsl(var(--accent-foreground-hsl));
     }
     
     &:active:not(:disabled) {
-      background-color: var(--accent);
+      background-color: hsl(var(--accent-hsl));
       opacity: 0.9;
     }
   }
@@ -103,13 +103,13 @@
   &.link {
     background-color: transparent;
     border-color: transparent;
-    color: var(--primary);
+    color: hsl(var(--primary-hsl));
     text-decoration-line: underline;
     padding: 0;
     height: auto;
     
     &:hover:not(:disabled) {
-      color: var(--primary);
+      color: hsl(var(--primary-hsl));
       opacity: 0.8;
     }
     

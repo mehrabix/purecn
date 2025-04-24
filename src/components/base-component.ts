@@ -27,14 +27,20 @@ export abstract class BaseComponent extends HTMLElement {
    * @private
    */
   private _initializeShadowDOM(): void {
+    // Create style element
     const styleEl = document.createElement('style');
     styleEl.id = 'component-styles';
     
+    // Create root element
     const rootEl = document.createElement('div');
     rootEl.id = 'component-root';
     
+    // Append to shadow DOM
     this.shadow.appendChild(styleEl);
     this.shadow.appendChild(rootEl);
+    
+    // Log for debugging
+    console.log(`Initialized shadow DOM for ${this.tagName.toLowerCase()}`);
   }
   
   /**
@@ -52,7 +58,13 @@ export abstract class BaseComponent extends HTMLElement {
     if (root) {
       root.innerHTML = content;
     } else {
-      console.error('component-root element not found in shadow DOM');
+      console.error(`component-root element not found in shadow DOM for ${this.tagName.toLowerCase()}`);
+      
+      // Fallback: create a new root element if it doesn't exist
+      const newRootEl = document.createElement('div');
+      newRootEl.id = 'component-root';
+      newRootEl.innerHTML = content;
+      this.shadow.appendChild(newRootEl);
     }
   }
   
@@ -67,17 +79,36 @@ export abstract class BaseComponent extends HTMLElement {
       return;
     }
     
-    const styleEl = this.shadow.getElementById('component-styles');
-    if (styleEl) {
-      styleEl.textContent = styles;
-    } else {
-      console.error('component-styles element not found in shadow DOM');
+    console.log(`Applying styles to ${this.tagName.toLowerCase()}, style length: ${styles.length} chars`);
+    console.log(`Style preview: ${styles.slice(0, 50)}...`);
+    
+    // Find or create the style element
+    let styleEl = this.shadow.getElementById('component-styles') as HTMLStyleElement;
+    
+    if (!styleEl) {
+      console.warn(`component-styles element not found in shadow DOM for ${this.tagName.toLowerCase()}, creating a new one`);
       
-      // Fallback: create a new style element if it doesn't exist
-      const newStyleEl = document.createElement('style');
-      newStyleEl.id = 'component-styles';
-      newStyleEl.textContent = styles;
-      this.shadow.prepend(newStyleEl);
+      // Create a new style element
+      styleEl = document.createElement('style');
+      styleEl.id = 'component-styles';
+      this.shadow.prepend(styleEl);
+    }
+    
+    // Apply the styles
+    try {
+      styleEl.textContent = styles;
+      console.log(`Styles successfully applied to ${this.tagName.toLowerCase()}`);
+      
+      // Log computed styles for debugging
+      setTimeout(() => {
+        const root = this.shadow.getElementById('component-root');
+        if (root && root.firstElementChild) {
+          const computedStyles = getComputedStyle(root.firstElementChild);
+          console.log(`Computed styles for ${this.tagName.toLowerCase()}: color=${computedStyles.color}, background=${computedStyles.background}`);
+        }
+      }, 0);
+    } catch (error) {
+      console.error(`Error applying styles to ${this.tagName.toLowerCase()}:`, error);
     }
   }
   

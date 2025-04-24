@@ -28,6 +28,11 @@ export class Theme extends BaseComponent {
    * Required render method from BaseComponent
    */
   render(): void {
+    // Apply the styles first
+    this.updateStyles(Theme.styles);
+    console.log('Theme styles applied');
+    
+    // Create icon container
     const icon = document.createElement('div');
     icon.className = 'icon';
     this.iconElement = icon;
@@ -35,8 +40,12 @@ export class Theme extends BaseComponent {
     // Set initial icon based on current theme
     this._updateIcon();
     
-    // Return the icon element to be appended to the shadow DOM
-    this.shadowRoot?.appendChild(icon);
+    // Add the icon to the component root instead of directly to shadow DOM
+    this.updateContent(`
+      <div class="theme-container">
+        ${icon.outerHTML}
+      </div>
+    `);
   }
 
   /**
@@ -135,5 +144,8 @@ export class Theme extends BaseComponent {
 
 // Register the custom element if we're in a browser environment
 if (typeof window !== 'undefined' && typeof customElements !== 'undefined') {
-  customElements.define('purecn-theme', Theme);
+  // Check if the element is already defined before trying to register it
+  if (!customElements.get('purecn-theme')) {
+    customElements.define('purecn-theme', Theme);
+  }
 } 
