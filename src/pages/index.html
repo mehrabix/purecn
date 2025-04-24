@@ -13,7 +13,7 @@
     // Setup global HMR variables
     window.__webpack_require__ = window.__webpack_require__ || {};
     window.__webpack_share_scopes__ = window.__webpack_share_scopes__ || {};
-    window.__webpack_public_path__ = '/components/';
+    window.__webpack_public_path__ = './components/';
     
     // Create a handler for HMR updates
     window.webpackHotUpdatepurecn = function(chunkId, moreModules) {
@@ -28,7 +28,7 @@
     <!-- Load components using proper script tags with type="module" -->
     <script type="module">
         // Define fixed import path to avoid automatic publicPath issues
-        const componentsPath = '/components';
+        const componentsPath = './components';
         
         // Add a helper function to refresh the theme
         function refreshTheme() {
@@ -1210,7 +1210,7 @@
                         
                     <div class="code-section">
                         <pre><code>// Import theme provider
-import { applyThemes, setTheme } from '/components/theme/theme-provider.js';
+import { applyThemes, setTheme } from './components/theme/theme-provider.js';
 
 // Apply themes on load
 applyThemes();

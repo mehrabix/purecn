@@ -52,6 +52,10 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Build
         run: pnpm build
+      - name: Copy components to pages
+        run: |
+          mkdir -p ./src/pages/components
+          cp -r ./dist/components/* ./src/pages/components/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
