@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PureCN Development Environment</title>
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary-color: #1e293b;
+            --border-color: #e2e8f0;
+            --background: #ffffff;
+            --text-color: #0f172a;
+            --muted-text: #64748b;
+            --padding: 1rem;
+            --radius: 0.5rem;
+            --transition: 0.2s ease;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+                        "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
+            color: var(--text-color);
+            background-color: var(--background);
+            padding: 0;
+            margin: 0;
+            transition: background-color 0.3s ease;
+        }
+        
+        body.dark {
+            --background: #020617;
+            --text-color: #f8fafc;
+            --muted-text: #94a3b8;
+            --border-color: #1e293b;
+        }
+        
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            flex: 0 0 260px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: var(--padding);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+        
+        .sidebar h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+        
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .component-section {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        body.dark .component-section {
+            background-color: #0f172a;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .code-section {
+            background-color: #f8fafc;
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+        
+        body.dark .code-section {
+            background-color: #1e293b;
+        }
+        
+        h2 {
+            margin-top: 0;
+            color: var(--text-color);
+        }
+        
+        .component-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .controls {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .theme-toggle-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .theme-toggle-button:hover {
+            background: var(--primary-hover);
+        }
+        
+        /* Status indicator */
+        .refresh-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: #22c55e;
+            color: white;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+        
+        .refresh-indicator.updating {
+            background-color: #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h1>PureCN Dev</h1>
+            <ul id="component-list">
+                <li><a href="#button" class="active">Button</a></li>
+                <li><a href="#avatar">Avatar</a></li>
+                <li><a href="#card">Card</a></li>
+                <li><a href="#theme">Theme</a></li>
+            </ul>
+            
+            <div class="controls" style="margin-top: 2rem;">
+                <div class="theme-toggle">
+                    <button id="theme-toggle" class="theme-toggle-button">Toggle Dark Mode</button>
+                </div>
+                <div id="hmr-status" class="refresh-indicator">HMR Ready</div>
+            </div>
+        </aside>
+        
+        <main class="content">
+            <section id="button" class="component-section">
+                <h2>Button Component</h2>
+                <p>Interactive button component with multiple variants and states.</p>
+                
+                <div class="component-demo" id="button-demo">
+                    <!-- Variants -->
+                    <pure-button>Primary</pure-button>
+                    <pure-button variant="secondary">Secondary</pure-button>
+                    <pure-button variant="outline">Outline</pure-button>
+                    <pure-button variant="ghost">Ghost</pure-button>
+                    <pure-button variant="link">Link</pure-button>
+                    <pure-button variant="destructive">Destructive</pure-button>
+                    
+                    <!-- Sizes -->
+                    <pure-button size="sm">Small</pure-button>
+                    <pure-button size="md">Medium</pure-button>
+                    <pure-button size="lg">Large</pure-button>
+                    <pure-button size="icon">🔍</pure-button>
+                    
+                    <!-- States -->
+                    <pure-button disabled>Disabled</pure-button>
+                    <pure-button loading>Loading</pure-button>
+                </div>
+                
+                <div class="code-section">
+                    <pre><code>&lt;pure-button&gt;Primary&lt;/pure-button&gt;
+&lt;pure-button variant="secondary"&gt;Secondary&lt;/pure-button&gt;
+&lt;pure-button variant="outline"&gt;Outline&lt;/pure-button&gt;
+&lt;pure-button variant="ghost"&gt;Ghost&lt;/pure-button&gt;
+&lt;pure-button variant="link"&gt;Link&lt;/pure-button&gt;
+&lt;pure-button variant="destructive"&gt;Destructive&lt;/pure-button&gt;</code></pre>
+                </div>
+            </section>
+            
+            <section id="avatar" class="component-section" style="display: none;">
+                <h2>Avatar Component</h2>
+                <p>Avatar component for user profile pictures with fallback support.</p>
+                
+                <div class="component-demo" id="avatar-demo">
+                    <!-- Sizes -->
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        size="sm">
+                    </pure-avatar>
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        size="md">
+                    </pure-avatar>
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        size="lg">
+                    </pure-avatar>
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        size="xl">
+                    </pure-avatar>
+                    
+                    <!-- Shapes -->
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        shape="circle">
+                    </pure-avatar>
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        shape="square">
+                    </pure-avatar>
+                    
+                    <!-- Fallback -->
+                    <pure-avatar 
+                        fallback="JD" 
+                        alt="John Doe">
+                    </pure-avatar>
+                    
+                    <!-- Status -->
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        status="online">
+                    </pure-avatar>
+                    <pure-avatar 
+                        src="https://github.com/shadcn.png" 
+                        alt="User" 
+                        status="offline">
+                    </pure-avatar>
+                </div>
+                
+                <div class="code-section">
+                    <pre><code>&lt;pure-avatar src="https://github.com/user.png" alt="User"&gt;&lt;/pure-avatar&gt;
+&lt;pure-avatar src="https://github.com/user.png" alt="User" size="md"&gt;&lt;/pure-avatar&gt;
+&lt;pure-avatar src="https://github.com/user.png" alt="User" shape="circle"&gt;&lt;/pure-avatar&gt;
+&lt;pure-avatar fallback="JD" alt="John Doe"&gt;&lt;/pure-avatar&gt;</code></pre>
+                </div>
+            </section>
+            
+            <section id="card" class="component-section" style="display: none;">
+                <h2>Card Component</h2>
+                <p>Card component for containing content in a stylish container.</p>
+                
+                <div class="component-demo" id="card-demo">
+                    <!-- Default card -->
+                    <pure-card style="width: 300px;">
+                        <h3>Default Card</h3>
+                        <p>This is a default card component.</p>
+                        <pure-button>Action</pure-button>
+                    </pure-card>
+                    
+                    <!-- Outline card -->
+                    <pure-card variant="outline" style="width: 300px;">
+                        <h3>Outline Card</h3>
+                        <p>This is an outline card component.</p>
+                        <pure-button variant="outline">Action</pure-button>
+                    </pure-card>
+                    
+                    <!-- Ghost card -->
+                    <pure-card variant="ghost" style="width: 300px;">
+                        <h3>Ghost Card</h3>
+                        <p>This is a ghost card component.</p>
+                        <pure-button variant="ghost">Action</pure-button>
+                    </pure-card>
+                    
+                    <!-- Hover card -->
+                    <pure-card hover style="width: 300px;">
+                        <h3>Hover Card</h3>
+                        <p>This card has hover effects enabled.</p>
+                        <pure-button variant="secondary">Action</pure-button>
+                    </pure-card>
+                </div>
+                
+                <div class="code-section">
+                    <pre><code>&lt;pure-card&gt;
+  &lt;h3&gt;Default Card&lt;/h3&gt;
+  &lt;p&gt;This is a default card component.&lt;/p&gt;
+  &lt;pure-button&gt;Action&lt;/pure-button&gt;
+&lt;/pure-card&gt;
+
+&lt;pure-card variant="outline"&gt;
+  &lt;h3&gt;Outline Card&lt;/h3&gt;
+  &lt;p&gt;This is an outline card component.&lt;/p&gt;
+&lt;/pure-card&gt;</code></pre>
+                </div>
+            </section>
+            
+            <section id="theme" class="component-section" style="display: none;">
+                <h2>Theme Provider</h2>
+                <p>Utilities for managing themes in your application.</p>
+                
+                <div class="component-demo">
+                    <div class="code-section">
+                        <pre><code>// Import theme provider
+import { applyThemes, setTheme } from 'purecn/components/theme/theme-provider.js';
+
+// Apply themes on load
+applyThemes();
+
+// Set specific theme
+setTheme('dark'); // 'light', 'dark', or 'system'</code></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Script to handle navigation -->
+    <script>
+        // Simple navigation
+        const links = document.querySelectorAll('.sidebar a');
+        const sections = document.querySelectorAll('.component-section');
+        
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Update active link
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show active section
+                const targetId = link.getAttribute('href').substring(1);
+                sections.forEach(section => {
+                    section.style.display = section.id === targetId ? 'block' : 'none';
+                });
+            });
+        });
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            
+            // Dispatch theme change event for components to react
+            const event = new CustomEvent('purecn-theme-change', {
+                detail: { 
+                    theme: document.body.classList.contains('dark') ? 'dark' : 'light' 
+                }
+            });
+            document.dispatchEvent(event);
+        });
+        
+        // HMR Status indicator
+        const hmrStatus = document.getElementById('hmr-status');
+        
+        // Listen for changes from Rspack HMR
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'webpackHotUpdate') {
+                hmrStatus.textContent = 'Updating...';
+                hmrStatus.classList.add('updating');
+                
+                // Reset after a short delay
+                setTimeout(() => {
+                    hmrStatus.textContent = 'HMR Ready';
+                    hmrStatus.classList.remove('updating');
+                }, 1000);
+            }
+        });
+    </script>
+    
+    <!-- Import components: Using dynamic imports to better support HMR -->
+    <script type="module">
+        // In development mode, we're using UMD format which assigns to window
+        // Wait for components to be available
+        function loadComponents() {
+            // First try the regular import approach
+            Promise.all([
+                import('../../dist/components/theme/theme-provider.js').catch(() => console.log('Trying UMD fallback for theme provider')),
+                import('../../dist/components/button/button.js').catch(() => console.log('Trying UMD fallback for button')),
+                import('../../dist/components/avatar/avatar.js').catch(() => console.log('Trying UMD fallback for avatar')),
+                import('../../dist/components/card/card.js').catch(() => console.log('Trying UMD fallback for card'))
+            ]).catch(err => {
+                console.log('Falling back to script tag approach due to:', err);
+                // If import fails (which it might in UMD), we'll try a different approach
+                loadComponentsWithScriptTags();
+            });
+        }
+
+        // Alternative loading method for UMD format
+        function loadComponentsWithScriptTags() {
+            const components = [
+                { name: 'theme-provider', path: '../../dist/components/theme/theme-provider.js' },
+                { name: 'button', path: '../../dist/components/button/button.js' },
+                { name: 'avatar', path: '../../dist/components/avatar/avatar.js' },
+                { name: 'card', path: '../../dist/components/card/card.js' }
+            ];
+
+            components.forEach(comp => {
+                const script = document.createElement('script');
+                script.src = comp.path;
+                script.onload = () => console.log(`Loaded ${comp.name} component`);
+                script.onerror = (e) => console.error(`Failed to load ${comp.name} component:`, e);
+                document.head.appendChild(script);
+            });
+        }
+
+        // Start loading components
+        loadComponents();
+    </script>
+    
+    <!-- Debug Panel -->
+    <div id="debug-panel" style="position: fixed; bottom: 20px; right: 20px; background: #f8f9fa; border: 1px solid #ddd; padding: 10px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 9999; max-width: 400px; max-height: 300px; overflow: auto; font-family: monospace; font-size: 12px;">
+        <h3 style="margin-top: 0; margin-bottom: 10px; font-size: 14px;">Style Debug Panel</h3>
+        <div>
+            <button id="inspect-button" onclick="inspectComponents()" style="background: #4f46e5; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px;">Inspect Components</button>
+            <button id="toggle-debug" onclick="toggleDebugPanel()" style="background: #64748b; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Hide</button>
+        </div>
+        <div id="debug-output" style="margin-top: 10px; white-space: pre-wrap; font-size: 11px;"></div>
+    </div>
+
+    <script>
+        // Component style inspection
+        function inspectComponents() {
+            const debugOutput = document.getElementById('debug-output');
+            debugOutput.innerHTML = '';
+            
+            // Check button component
+            const buttons = document.querySelectorAll('pure-button');
+            if (buttons.length > 0) {
+                const firstButton = buttons[0];
+                const shadow = firstButton.shadowRoot;
+                const styleEl = shadow?.getElementById('component-styles');
+                
+                debugOutput.innerHTML += `<b>Button Component (${buttons.length} instances)</b>\n`;
+                debugOutput.innerHTML += `Has Shadow Root: ${!!shadow}\n`;
+                debugOutput.innerHTML += `Has Style Element: ${!!styleEl}\n`;
+                debugOutput.innerHTML += `Style Content Length: ${styleEl?.textContent?.length || 0} chars\n`;
+                debugOutput.innerHTML += `Style Content Sample: ${styleEl?.textContent?.substring(0, 100) || 'Empty'}...\n\n`;
+            }
+            
+            // Check avatar component
+            const avatars = document.querySelectorAll('pure-avatar');
+            if (avatars.length > 0) {
+                const firstAvatar = avatars[0];
+                const shadow = firstAvatar.shadowRoot;
+                const styleEl = shadow?.getElementById('component-styles');
+                
+                debugOutput.innerHTML += `<b>Avatar Component (${avatars.length} instances)</b>\n`;
+                debugOutput.innerHTML += `Has Shadow Root: ${!!shadow}\n`;
+                debugOutput.innerHTML += `Has Style Element: ${!!styleEl}\n`;
+                debugOutput.innerHTML += `Style Content Length: ${styleEl?.textContent?.length || 0} chars\n`;
+                debugOutput.innerHTML += `Style Content Sample: ${styleEl?.textContent?.substring(0, 100) || 'Empty'}...\n\n`;
+            }
+            
+            // Check card component
+            const cards = document.querySelectorAll('pure-card');
+            if (cards.length > 0) {
+                const firstCard = cards[0];
+                const shadow = firstCard.shadowRoot;
+                const styleEl = shadow?.getElementById('component-styles');
+                
+                debugOutput.innerHTML += `<b>Card Component (${cards.length} instances)</b>\n`;
+                debugOutput.innerHTML += `Has Shadow Root: ${!!shadow}\n`;
+                debugOutput.innerHTML += `Has Style Element: ${!!styleEl}\n`;
+                debugOutput.innerHTML += `Style Content Length: ${styleEl?.textContent?.length || 0} chars\n`;
+                debugOutput.innerHTML += `Style Content Sample: ${styleEl?.textContent?.substring(0, 100) || 'Empty'}...\n`;
+            }
+        }
+        
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debug-panel');
+            const btn = document.getElementById('toggle-debug');
+            const isVisible = panel.style.height !== '30px';
+            
+            if (isVisible) {
+                panel.style.height = '30px';
+                panel.style.overflow = 'hidden';
+                btn.textContent = 'Show';
+            } else {
+                panel.style.height = 'auto';
+                panel.style.maxHeight = '300px';
+                panel.style.overflow = 'auto';
+                btn.textContent = 'Hide';
+            }
+        }
+        
+        // Wait for components to load then inspect
+        setTimeout(inspectComponents, 1000);
+    </script>
+</body>
+</html> 

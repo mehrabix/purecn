@@ -7,5 +7,14 @@
     "emitDeclarationOnly": true
   },
   "include": ["src/**/*"],
-  "exclude": ["**/__tests__/**", "**/*.test.ts", "**/*.spec.ts", "node_modules", "dist"]
+  "exclude": [
+    "**/__tests__/**", 
+    "**/__mocks__/**", 
+    "**/*.test.ts", 
+    "**/*.spec.ts", 
+    "**/*.mock.ts",
+    "**/mock*.ts",
+    "node_modules", 
+    "dist"
+  ]
 } 

@@ -78,11 +78,41 @@ export function setTheme(theme: Theme): void {
     document.documentElement.classList.remove('dark');
   }
 
-  // Optional: If you wanted to toggle style tags instead of just using the class:
-  // const lightStyle = document.getElementById(LIGHT_STYLE_ID) as HTMLStyleElement | null;
-  // const darkStyle = document.getElementById(DARK_STYLE_ID) as HTMLStyleElement | null;
-  // if (lightStyle) lightStyle.disabled = effectiveTheme === 'dark';
-  // if (darkStyle) darkStyle.disabled = effectiveTheme === 'light';
+  // Trigger a custom event for components to listen to
+  const themeChangeEvent = new CustomEvent('purecn-theme-change', {
+    detail: { theme: effectiveTheme }
+  });
+  document.dispatchEvent(themeChangeEvent);
+}
+
+/**
+ * Update theme stylesheets with new CSS content
+ * Used for hot module replacement
+ */
+export function updateThemeStyles(newBaseCss: string, newLightCss: string, newDarkCss: string): void {
+  // Update base styles
+  const baseStyle = document.getElementById(BASE_STYLE_ID);
+  if (baseStyle) {
+    baseStyle.textContent = newBaseCss;
+  }
+  
+  // Update light theme styles
+  const lightStyle = document.getElementById(LIGHT_STYLE_ID);
+  if (lightStyle) {
+    lightStyle.textContent = newLightCss;
+  }
+  
+  // Update dark theme styles
+  const darkStyle = document.getElementById(DARK_STYLE_ID);
+  if (darkStyle) {
+    darkStyle.textContent = newDarkCss;
+  }
+  
+  // Re-apply current theme to ensure all styles are properly updated
+  const storedTheme = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
+  if (storedTheme) {
+    setTheme(storedTheme);
+  }
 }
 
 // Optional: Listen for system theme changes if the current theme is 'system'
@@ -94,4 +124,55 @@ if (typeof window !== 'undefined') {
             setTheme('system'); // Re-evaluate system theme
         }
     });
+}
+
+// Support HMR
+if (import.meta.hot) {
+  // For ESM format
+  import.meta.hot.accept((newModule) => {
+    if (newModule) {
+      console.log('Theme provider HMR triggered (ESM), updating styles');
+      // Update theme styles when the module is hot-updated
+      updateThemeStyles(
+        newModule.baseCss || baseCss,
+        newModule.lightCss || lightCss,
+        newModule.darkCss || darkCss
+      );
+    }
+  });
+}
+
+// For development mode using UMD format (global object)
+if (typeof window !== 'undefined') {
+  // Register this module for HMR
+  if (!window.purecn) {
+    window.purecn = {};
+  }
+  
+  // Store the theme provider for UMD format HMR
+  window.purecn.themeProvider = {
+    applyThemes,
+    setTheme,
+    updateThemeStyles,
+    baseCss,
+    lightCss,
+    darkCss,
+    // Method to handle HMR for UMD format
+    hotUpdate: (newThemeData: any) => {
+      console.log('Theme provider HMR triggered (UMD), updating styles');
+      if (newThemeData) {
+        updateThemeStyles(
+          newThemeData.baseCss || baseCss,
+          newThemeData.lightCss || lightCss,
+          newThemeData.darkCss || darkCss
+        );
+      }
+    }
+  };
+  
+  // Also store in window for easier access
+  window.themeProvider = {
+    applyThemes,
+    setTheme
+  };
 } 

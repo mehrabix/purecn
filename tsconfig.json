@@ -16,7 +16,13 @@
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "allowJs": true
   },
-  "files": ["src/types/scss.d.ts"],
+  "files": ["src/types/scss.d.ts", "src/types/hmr.d.ts"],
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules", 
+    "dist",
+    "**/__mocks__/**", 
+    "**/*.mock.ts",
+    "**/mock*.ts"
+  ]
 } 

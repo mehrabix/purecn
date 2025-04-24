@@ -1,12 +1,15 @@
 import styles from './avatar.scss';
+import { BaseComponent } from '../base-component';
 
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 type AvatarShape = 'circle' | 'square';
 type AvatarStatus = 'online' | 'offline' | 'busy' | 'away' | 'none';
 
-export class AvatarComponent extends HTMLElement {
-  private shadow: ShadowRoot;
-  private static styles: string = '';
+export class AvatarComponent extends BaseComponent { 
+  static override styles: string = '';
+  
+  // Track if we need to set up error handlers
+  private needsErrorHandler = false;
 
   static {
     if (typeof styles === 'string') {
@@ -16,8 +19,8 @@ export class AvatarComponent extends HTMLElement {
 
   constructor() {
     super();
-    this.shadow = this.attachShadow({ mode: 'open' });
-    this.render();
+    // Add data-instance-id for HMR targeting
+    this.setAttribute('data-instance-id', this.uniqueSelector.split('"')[1]);
   }
 
   static get observedAttributes() {
@@ -66,12 +69,9 @@ export class AvatarComponent extends HTMLElement {
     }
   }
 
-  private render() {
-    const styleElement = document.createElement('style');
-    styleElement.textContent = AvatarComponent.styles;
-    
-    this.shadow.innerHTML = '';
-    this.shadow.appendChild(styleElement);
+  protected override render() {
+    // Update styles
+    this.updateStyles(AvatarComponent.styles);
     
     // Add a delay for loading the image if specified
     const delayAttr = this.delayMs > 0 ? `loading="lazy" fetchpriority="low"` : '';
@@ -91,19 +91,24 @@ export class AvatarComponent extends HTMLElement {
       ? `<span class="status-indicator ${this.status}" data-slot="avatar-status"></span>` 
       : '';
 
-    this.shadow.innerHTML += `
+    // Update content
+    this.updateContent(`
       <div class="avatar ${this.size} ${this.shape}" data-slot="avatar">
         ${avatarContent}
         ${statusHtml}
       </div>
-    `;
+    `);
 
     // Add error handler if image is present
     if (this.src) {
-      const img = this.shadow.querySelector('img');
-      if (img) {
-        img.addEventListener('error', () => this.handleError());
-      }
+      this.needsErrorHandler = true;
+      // Wait for next microtask to ensure DOM is updated
+      setTimeout(() => {
+        const img = this.shadow.querySelector('img');
+        if (img) {
+          img.addEventListener('error', () => this.handleError());
+        }
+      }, 0);
     }
   }
 }
@@ -111,4 +116,14 @@ export class AvatarComponent extends HTMLElement {
 // Register the component
 if (!customElements.get('pure-avatar')) {
   customElements.define('pure-avatar', AvatarComponent);
+}
+
+// Support HMR
+if (import.meta.hot) {
+  import.meta.hot.accept((newModule) => {
+    if (newModule) {
+      // Update styles when module is hot-updated
+      AvatarComponent.hotReload(newModule.AvatarComponent.styles);
+    }
+  });
 } 

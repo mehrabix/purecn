@@ -6,38 +6,100 @@
     <title>Web Components Demo</title>
 
     <!-- 1. Apply Theme Styles -->
-    <script type="module">
-        try {
-            // Import the CORRECT provider bundle
-            const themeProvider = await import('../../dist/components/theme/theme-provider.min.js'); 
-            if (themeProvider && themeProvider.applyThemes) {
-                themeProvider.applyThemes(); // Apply themes immediately
-                
-                // Apply dark mode directly without setTimeout
-                if (themeProvider.setTheme) {
-                    themeProvider.setTheme('dark');
-                    // Store preference in localStorage
-                    localStorage.setItem('theme', 'dark');
-                    // Update toggle button state
-                    const setDarkBtn = document.getElementById('set-dark');
-                    if (setDarkBtn) {
-                        setDarkBtn.classList.add('active');
-                        document.getElementById('set-light')?.classList.remove('active');
-                        document.getElementById('set-system')?.classList.remove('active');
-                    }
-                }
-            } else {
-                console.error('Theme provider or applyThemes function not found.');
-            }
-        } catch (error) {
-            console.error('Failed to load or apply theme provider:', error);
+    <script>
+        // Alternative loading for UMD format in development
+        function loadTheme() {
+            // First try ES module
+            tryLoadThemeAsModule().catch(err => {
+                console.log('Falling back to script tag approach:', err);
+                loadThemeWithScriptTag();
+            });
         }
+
+        // Try ES module import
+        async function tryLoadThemeAsModule() {
+            try {
+                const themeProvider = await import('../../dist/components/theme/theme-provider.min.js');
+                if (themeProvider && themeProvider.applyThemes) {
+                    themeProvider.applyThemes();
+                    
+                    // Apply dark mode
+                    if (themeProvider.setTheme) {
+                        themeProvider.setTheme('dark');
+                        // Store preference in localStorage
+                        localStorage.setItem('theme', 'dark');
+                        updateToggleButtons('dark');
+                    }
+                    
+                    // Store for later use
+                    window.themeProvider = themeProvider;
+                } else {
+                    throw new Error('Theme provider or applyThemes function not found');
+                }
+            } catch (error) {
+                console.error('Module import failed:', error);
+                throw error;
+            }
+        }
+
+        // Use script tag for UMD format
+        function loadThemeWithScriptTag() {
+            const script = document.createElement('script');
+            script.src = '../../dist/components/theme/theme-provider.js';
+            script.onload = () => {
+                if (window.purecn && window.purecn.themeProvider) {
+                    const themeProvider = window.purecn.themeProvider;
+                    themeProvider.applyThemes();
+                    themeProvider.setTheme('dark');
+                    localStorage.setItem('theme', 'dark');
+                    updateToggleButtons('dark');
+                    
+                    // Store for later use
+                    window.themeProvider = themeProvider;
+                } else {
+                    console.error('Theme provider not found in window.purecn');
+                }
+            };
+            script.onerror = (e) => console.error('Failed to load theme provider script:', e);
+            document.head.appendChild(script);
+        }
+        
+        // Update toggle buttons based on theme
+        function updateToggleButtons(theme) {
+            const setDarkBtn = document.getElementById('set-dark');
+            if (setDarkBtn) {
+                setDarkBtn.classList.toggle('active', theme === 'dark');
+                document.getElementById('set-light')?.classList.toggle('active', theme === 'light');
+                document.getElementById('set-system')?.classList.toggle('active', theme === 'system');
+            }
+        }
+        
+        // Start loading theme
+        loadTheme();
     </script>
 
-    <!-- Load components AFTER applying theme -->
-    <script type="module" defer src="../../dist/components/avatar/avatar.min.js"></script>
-    <script type="module" defer src="../../dist/components/button/button.min.js"></script>
-    
+    <!-- Load components with approach that supports both UMD and ESM -->
+    <script>
+        // Load components with approach that works for both formats
+        function loadComponents() {
+            const components = [
+                { name: 'avatar', path: '../../dist/components/avatar/avatar.min.js' },
+                { name: 'button', path: '../../dist/components/button/button.min.js' }
+            ];
+            
+            components.forEach(comp => {
+                const script = document.createElement('script');
+                script.src = comp.path; 
+                script.onload = () => console.log(`Loaded ${comp.name} component`);
+                script.onerror = (e) => console.error(`Failed to load ${comp.name} component:`, e);
+                document.head.appendChild(script);
+            });
+        }
+        
+        // Execute after theme is loaded
+        setTimeout(loadComponents, 100);
+    </script>
+
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -129,47 +191,72 @@
     </style>
 
     <!-- 3. Theme Toggle Script -->
-    <script type="module">
-        try {
-            // Import the CORRECT provider bundle
-            const themeProvider = await import('../../dist/components/theme/theme-provider.min.js'); 
-            if (themeProvider && themeProvider.setTheme) {
-                const setLightBtn = document.getElementById('set-light');
-                const setDarkBtn = document.getElementById('set-dark');
-                const setSystemBtn = document.getElementById('set-system');
-                
-                // Initialize with the current theme
-                const updateActiveButton = (theme) => {
-                    setLightBtn.classList.toggle('active', theme === 'light');
-                    setDarkBtn.classList.toggle('active', theme === 'dark');
-                    setSystemBtn.classList.toggle('active', theme === 'system');
-                };
-                
-                // Get current theme
-                const currentTheme = localStorage.getItem('theme') || 'system';
-                updateActiveButton(currentTheme);
-                
-                // Event listeners
-                setLightBtn?.addEventListener('click', () => {
-                    themeProvider.setTheme('light');
-                    updateActiveButton('light');
-                });
-                
-                setDarkBtn?.addEventListener('click', () => {
-                    themeProvider.setTheme('dark');
-                    updateActiveButton('dark');
-                });
-                
-                setSystemBtn?.addEventListener('click', () => {
-                    themeProvider.setTheme('system');
-                    updateActiveButton('system');
-                });
-            } else {
-                 console.error('Theme provider or setTheme function not found.');
+    <script>
+        // Set up the theme toggle functionality
+        function setupThemeToggle() {
+            const setLightBtn = document.getElementById('set-light');
+            const setDarkBtn = document.getElementById('set-dark');
+            const setSystemBtn = document.getElementById('set-system');
+            
+            if (!setLightBtn || !setDarkBtn || !setSystemBtn) {
+                console.warn('Theme toggle buttons not found');
+                return;
             }
-        } catch (error) {
-            console.error('Failed to load theme provider for toggling:', error);
+            
+            // Initialize with the current theme
+            const currentTheme = localStorage.getItem('theme') || 'system';
+            updateToggleButtons(currentTheme);
+            
+            // Get theme provider - could be from either ES module or UMD
+            const getThemeProvider = () => {
+                // Try window.themeProvider (set in our script)
+                if (window.themeProvider) {
+                    return window.themeProvider;
+                }
+                
+                // Try UMD global
+                if (window.purecn && window.purecn.themeProvider) {
+                    return window.purecn.themeProvider;
+                }
+                
+                console.error('Theme provider not available');
+                return null;
+            };
+            
+            // Set up event listeners
+            setLightBtn.addEventListener('click', () => {
+                const themeProvider = getThemeProvider();
+                if (themeProvider && themeProvider.setTheme) {
+                    themeProvider.setTheme('light');
+                    localStorage.setItem('theme', 'light');
+                    updateToggleButtons('light');
+                }
+            });
+            
+            setDarkBtn.addEventListener('click', () => {
+                const themeProvider = getThemeProvider();
+                if (themeProvider && themeProvider.setTheme) {
+                    themeProvider.setTheme('dark');
+                    localStorage.setItem('theme', 'dark');
+                    updateToggleButtons('dark');
+                }
+            });
+            
+            setSystemBtn.addEventListener('click', () => {
+                const themeProvider = getThemeProvider();
+                if (themeProvider && themeProvider.setTheme) {
+                    themeProvider.setTheme('system');
+                    localStorage.setItem('theme', 'system');
+                    updateToggleButtons('system');
+                }
+            });
         }
+        
+        // Wait for theme provider to load, then set up toggles
+        document.addEventListener('DOMContentLoaded', () => {
+            // Give some time for the theme provider to load
+            setTimeout(setupThemeToggle, 300);
+        });
     </script>
 </head>
 <body>

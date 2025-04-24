@@ -1,23 +1,26 @@
 import styles from './button.scss';
+import { BaseComponent } from '../base-component';
 
 // Types
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'link' | 'destructive';
 type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
 
-export class ButtonComponent extends HTMLElement {
-  private shadow: ShadowRoot;
-  private static styles: string = '';
+export class ButtonComponent extends BaseComponent {
+  static override styles: string = '';
 
   static {
     if (typeof styles === 'string') {
       ButtonComponent.styles = styles;
+      console.log('Button styles loaded from SCSS:', styles.substring(0, 100) + '...');
+    } else {
+      console.error('Button styles not loaded correctly:', typeof styles, styles);
     }
   }
 
   constructor() {
     super();
-    this.shadow = this.attachShadow({ mode: 'open' });
-    this.render();
+    // Add data-instance-id for HMR targeting
+    this.setAttribute('data-instance-id', this.uniqueSelector.split('"')[1]);
   }
 
   static get observedAttributes() {
@@ -46,16 +49,16 @@ export class ButtonComponent extends HTMLElement {
     }
   }
 
-  private render() {
-    const styleElement = document.createElement('style');
-    styleElement.textContent = ButtonComponent.styles;
+  protected override render() {
+    console.log('Rendering button with styles:', ButtonComponent.styles.substring(0, 50) + '...');
     
-    this.shadow.innerHTML = '';
-    this.shadow.appendChild(styleElement);
+    // Update styles
+    this.updateStyles(ButtonComponent.styles);
     
     const loadingContent = this.loading ? '<span class="spinner"></span>' : '';
     
-    this.shadow.innerHTML += `
+    // Update content
+    this.updateContent(`
       <button 
         class="btn ${this.variant} ${this.size}" 
         ${this.disabled ? 'disabled' : ''}
@@ -65,11 +68,44 @@ export class ButtonComponent extends HTMLElement {
         ${loadingContent}
         <slot></slot>
       </button>
-    `;
+    `);
   }
 }
 
 // Register the component
 if (!customElements.get('pure-button')) {
   customElements.define('pure-button', ButtonComponent);
+}
+
+// Support HMR
+if (import.meta.hot) {
+  // For ESM format
+  import.meta.hot.accept((newModule) => {
+    if (newModule) {
+      console.log('Button HMR triggered (ESM), updating styles');
+      ButtonComponent.hotReload(newModule.ButtonComponent.styles);
+    }
+  });
+}
+
+// For development mode using UMD format (global object)
+if (typeof window !== 'undefined') {
+  // Register this component module for HMR if global window.purecn doesn't exist yet
+  if (!window.purecn) {
+    window.purecn = {};
+  }
+  
+  // Store the component for HMR in UMD format
+  if (!window.purecn.button) {
+    window.purecn.button = {
+      ButtonComponent,
+      // Method to handle HMR for UMD format
+      hotUpdate: (newComponent: any) => {
+        console.log('Button HMR triggered (UMD), updating styles');
+        if (newComponent && newComponent.styles) {
+          ButtonComponent.hotReload(newComponent.styles);
+        }
+      }
+    };
+  }
 } 

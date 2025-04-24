@@ -16,12 +16,12 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "clean": "rimraf dist",
+    "test:coverage": "jest --coverage",
+    "clean": "node scripts/clean.js",
+    "build": "pnpm clean && rspack build --config rspack.config.cjs --mode=production && pnpm types",
+    "dev": "rspack serve --config rspack.config.cjs --mode=development --hot",
     "types": "tsc --project tsconfig.declaration.json",
-    "build": "pnpm test && pnpm clean && rspack build --config rspack.config.cjs --mode=production && pnpm types && node scripts/build-cli.js",
-    "dev": "rspack serve --config rspack.config.cjs --mode=development",
     "analyze": "rspack build --mode=production --analyze"
-
   },
   "keywords": [
     "web-components",
