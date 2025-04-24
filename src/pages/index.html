@@ -10,7 +10,7 @@
     // Pre-initialize the global object for HMR
     window.purecn = window.purecn || {};
     
-    // Setup global webpack HMR variables
+    // Setup global HMR variables
     window.__webpack_require__ = window.__webpack_require__ || {};
     window.__webpack_share_scopes__ = window.__webpack_share_scopes__ || {};
     window.__webpack_public_path__ = '/components/';
@@ -1145,7 +1145,7 @@ setTheme('dark'); // 'light', 'dark', or 'system'</code></pre>
                         
                         <div class="code-section">
                             <pre><code># Install globally
-npm install -g purecn
+pnpm add -g purecn
 
 # Initialize in your project
 purecn init ./my-project
@@ -1193,18 +1193,21 @@ purecn components add button ./my-project</code></pre>
                                 <p>This will:</p>
                                 <ol>
                                     <li>Build components if needed</li>
-                                    <li>Start the development server</li>
+                                    <li>Start the development server with rspack</li>
                                     <li>Enable Hot Module Replacement</li>
                                 </ol>
                                 
                                 <h3>Other Scripts</h3>
                                 <ul>
-                                    <li><code>npm run build</code> - Build the library for production</li>
-                                    <li><code>npm run dev</code> - Start the development server with the custom Node script</li>
-                                    <li><code>npm test</code> - Run the test suite</li>
-                                    <li><code>npm run verify</code> - Verify project structure</li>
-                                    <li><code>npm run analyze</code> - Analyze bundle sizes</li>
-                                    <li><code>npm run types</code> - Generate TypeScript declaration files</li>
+                                    <li><code>pnpm build</code> - Build the library for production using rspack</li>
+                                    <li><code>pnpm dev</code> - Start the development server with rspack in hot mode</li>
+                                    <li><code>pnpm test</code> - Run the Jest test suite</li>
+                                    <li><code>pnpm test:watch</code> - Run tests in watch mode</li>
+                                    <li><code>pnpm test:coverage</code> - Generate test coverage report</li>
+                                    <li><code>pnpm clean</code> - Clean build directories</li>
+                                    <li><code>pnpm verify</code> - Verify project structure</li>
+                                    <li><code>pnpm analyze</code> - Analyze bundle sizes with rspack analyzer</li>
+                                    <li><code>pnpm types</code> - Generate TypeScript declaration files</li>
                                 </ul>
                                 
                                 <h3>Project Structure</h3>
@@ -1698,7 +1701,7 @@ class CustomButton extends PureButton {
             
             // HMR Status indicator
         window.addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'webpackHotUpdate') {
+            if (event.data && (event.data.type === 'webpackHotUpdate' || event.data.type === 'rspackHotUpdate')) {
                 hmrStatus.textContent = 'Updating...';
                 hmrStatus.classList.add('updating');
                 

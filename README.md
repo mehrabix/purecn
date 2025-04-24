@@ -24,24 +24,27 @@ Pure web components library with a shadcn-like design system.
 To start the development server with hot reloading:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 This will:
 1. Build components if needed
-2. Start the development server
+2. Start the development server with rspack
 3. Enable Hot Module Replacement
 
 Then open your browser to [http://localhost:9000](http://localhost:9000) to see the components in action.
 
 ### Other Scripts
 
-- `npm run build` - Build the library for production
-- `npm run dev` - Start the development server with the custom Node script
-- `npm test` - Run the test suite
-- `npm run verify` - Verify project structure
-- `npm run analyze` - Analyze bundle sizes
-- `npm run types` - Generate TypeScript declaration files
+- `pnpm build` - Build the library for production using rspack
+- `pnpm dev` - Start the development server with rspack in hot mode
+- `pnpm test` - Run the Jest test suite
+- `pnpm test:watch` - Run tests in watch mode
+- `pnpm test:coverage` - Generate test coverage report
+- `pnpm clean` - Clean build directories
+- `pnpm verify` - Verify project structure
+- `pnpm analyze` - Analyze bundle sizes with rspack analyzer
+- `pnpm types` - Generate TypeScript declaration files
 
 ## Project Structure
 
@@ -62,7 +65,7 @@ src/
 To build the library for production:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 This will create a `dist` directory with the compiled components.
@@ -72,7 +75,7 @@ This will create a `dist` directory with the compiled components.
 Run the tests with:
 
 ```bash
-npm test
+pnpm test
 ```
 
 ## License
