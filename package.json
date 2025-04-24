@@ -21,7 +21,8 @@
     "build": "pnpm clean && rspack build --config rspack.config.cjs --mode=production && pnpm types",
     "dev": "rspack serve --config rspack.config.cjs --mode=development --hot",
     "types": "tsc --project tsconfig.declaration.json",
-    "analyze": "rspack build --mode=production --analyze"
+    "analyze": "rspack build --mode=production --analyze",
+    "verify": "node scripts/verify-structure.js"
   },
   "keywords": [
     "web-components",
@@ -39,6 +40,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@types/jest": "^29.5.14",
     "brotli-webpack-plugin": "^1.1.0",
+    "chalk": "^5.4.1",
     "compression-webpack-plugin": "^11.1.0",
     "css-loader": "^6.11.0",
     "identity-obj-proxy": "^3.0.0",
