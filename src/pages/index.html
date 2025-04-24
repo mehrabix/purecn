@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PureCN Dev Environment</title>
+    <title>PureCN - UI Components</title>
 
     <!-- Setup global HMR handler first -->
     <script>
@@ -78,15 +78,8 @@
                 // Apply a final refresh to ensure all styles are applied
                 setTimeout(refreshTheme, 100);
                 
-                // Add a refresh button to the UI
-                const controls = document.querySelector('.controls');
-                if (controls) {
-                    const refreshBtn = document.createElement('button');
-                    refreshBtn.textContent = 'Refresh Styles';
-                    refreshBtn.className = 'theme-toggle-button';
-                    refreshBtn.onclick = refreshTheme;
-                    controls.appendChild(refreshBtn);
-                }
+                // We'll let our custom refresh button handle this instead
+                // Don't auto-inject refresh button as we have our own
             })
             .catch(err => {
                 console.error('Failed to load components:', err);
@@ -94,240 +87,862 @@
     </script>
 
     <style>
+        /* Modern CSS Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        /* Base variables */
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --secondary-color: #1e293b;
-            --border-color: #e2e8f0;
+            /* Colors - Updated to match shadcn UI colors more closely */
             --background: #ffffff;
-            --text-color: #0f172a;
-            --muted-text: #64748b;
-            --padding: 1rem;
-            --radius: 0.5rem;
-            --transition: 0.2s ease;
+            --foreground: #09090b;
+            --card: #ffffff;
+            --card-foreground: #09090b;
+            --popover: #ffffff;
+            --popover-foreground: #09090b;
+            --primary: #111827;
+            --primary-foreground: #ffffff;
+            --secondary: #f4f4f5;
+            --secondary-foreground: #18181b;
+            --muted: #f4f4f5;
+            --muted-foreground: #71717a;
+            --accent: #f4f4f5;
+            --accent-foreground: #18181b;
+            --destructive: #ef4444;
+            --destructive-foreground: #f8fafc;
+            --border: #e4e4e7;
+            --input: #e4e4e7;
+            --ring: #18181b;
             
-            /* Add HSL variable values explicitly */
-            --primary-hsl: 240 85% 59%;
-            --primary-foreground-hsl: 0 0% 100%;
-            --secondary-hsl: 217 33% 17%;
-            --secondary-foreground-hsl: 210 40% 98%;
-            --destructive-hsl: 0 84% 60%;
-            --destructive-foreground-hsl: 0 0% 100%;
+            /* Spacing and layout */
+            --radius: 0.5rem;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', monospace;
+            
+            /* HSL variants for theme transition */
             --background-hsl: 0 0% 100%;
-            --foreground-hsl: 222 84% 5%;
+            --foreground-hsl: 240 10% 4%;
             --card-hsl: 0 0% 100%;
-            --card-foreground-hsl: 222 84% 5%;
-            --accent-hsl: 210 40% 96%;
-            --accent-foreground-hsl: 222 47% 11%;
-            --muted-hsl: 210 40% 96%;
-            --muted-foreground-hsl: 215 16% 47%;
+            --card-foreground-hsl: 240 10% 4%;
             --popover-hsl: 0 0% 100%;
-            --popover-foreground-hsl: 222 84% 5%;
-            --border-hsl: 214 32% 91%;
-            --input-hsl: 214 32% 91%;
-            --ring-hsl: 222 84% 5%;
+            --popover-foreground-hsl: 240 10% 4%;
+            --primary-hsl: 222 47% 11%;
+            --primary-foreground-hsl: 0 0% 100%;
+            --secondary-hsl: 240 5% 96%;
+            --secondary-foreground-hsl: 240 6% 10%;
+            --muted-hsl: 240 5% 96%;
+            --muted-foreground-hsl: 240 4% 46%;
+            --accent-hsl: 240 5% 96%;
+            --accent-foreground-hsl: 240 6% 10%;
+            --destructive-hsl: 0 84% 60%;
+            --destructive-foreground-hsl: 210 40% 98%;
+            --border-hsl: 240 6% 90%;
+            --input-hsl: 240 6% 90%;
+            --ring-hsl: 240 6% 10%;
+        }
+        
+        /* Dark theme */
+        .dark {
+            --background: #09090b;
+            --foreground: #fafafa;
+            --card: #09090b;
+            --card-foreground: #fafafa;
+            --popover: #09090b;
+            --popover-foreground: #fafafa;
+            --primary: #fafafa;
+            --primary-foreground: #18181b;
+            --secondary: #27272a;
+            --secondary-foreground: #fafafa;
+            --muted: #27272a;
+            --muted-foreground: #a1a1aa;
+            --accent: #27272a;
+            --accent-foreground: #fafafa;
+            --destructive: #7f1d1d;
+            --destructive-foreground: #fafafa;
+            --border: #27272a;
+            --input: #27272a;
+            --ring: #d4d4d8;
+            
+            /* Dark theme HSL */
+            --background-hsl: 240 10% 4%;
+            --foreground-hsl: 0 0% 98%;
+            --card-hsl: 240 10% 4%;
+            --card-foreground-hsl: 0 0% 98%;
+            --popover-hsl: 240 10% 4%;
+            --popover-foreground-hsl: 0 0% 98%;
+            --primary-hsl: 0 0% 98%;
+            --primary-foreground-hsl: 240 6% 10%;
+            --secondary-hsl: 240 4% 16%;
+            --secondary-foreground-hsl: 0 0% 98%;
+            --muted-hsl: 240 4% 16%;
+            --muted-foreground-hsl: 240 5% 65%;
+            --accent-hsl: 240 4% 16%;
+            --accent-foreground-hsl: 0 0% 98%;
+            --destructive-hsl: 0 63% 31%;
+            --destructive-foreground-hsl: 0 0% 98%;
+            --border-hsl: 240 4% 16%;
+            --input-hsl: 240 4% 16%;
+            --ring-hsl: 240 5% 84%;
+        }
+        
+        /* Base styles */
+        html, body {
+            height: 100%;
+            margin: 0;
         }
         
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
-                        "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.5;
-            color: var(--text-color);
+            font-family: var(--font-sans);
             background-color: var(--background);
-            padding: 0;
-            margin: 0;
-            transition: background-color 0.3s ease;
+            color: var(--foreground);
+            line-height: 1.5;
+            font-feature-settings: "rlig" 1, "calt" 1;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            transition: 
+                background-color 0.2s ease,
+                color 0.2s ease;
         }
         
-        body.dark {
-            --background: #020617;
-            --text-color: #f8fafc;
-            --muted-text: #94a3b8;
-            --border-color: #1e293b;
-            
-            /* Dark theme HSL values */
-            --background-hsl: 222 84% 5%;
-            --foreground-hsl: 210 40% 98%;
-            --card-hsl: 222 47% 11%;
-            --card-foreground-hsl: 210 40% 98%;
-            --popover-hsl: 222 47% 11%;
-            --popover-foreground-hsl: 210 40% 98%;
-            --primary-hsl: 210 40% 98%;
-            --primary-foreground-hsl: 222 47% 11%;
-            --secondary-hsl: 217 33% 17%;
-            --secondary-foreground-hsl: 210 40% 98%;
-            --muted-hsl: 217 33% 17%;
-            --muted-foreground-hsl: 215 20% 65%;
-            --accent-hsl: 217 33% 17%;
-            --accent-foreground-hsl: 210 40% 98%;
-            --destructive-hsl: 0 63% 31%;
-            --destructive-foreground-hsl: 210 40% 98%;
-            --border-hsl: 217 33% 17%;
-            --input-hsl: 217 33% 17%;
-            --ring-hsl: 212 100% 47%;
-        }
-        
-        .layout {
+        /* Layout */
+        .app-container {
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
         
-        .sidebar {
-            flex: 0 0 260px;
-            background-color: var(--secondary-color);
-            color: white;
-            padding: var(--padding);
-            border-right: 1px solid var(--border-color);
-            overflow-y: auto;
+        .main-header {
+            background-color: var(--background);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
         
-        .sidebar h1 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .sidebar li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar a {
-            display: block;
-            padding: 0.5rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-        
-        .sidebar a:hover,
-        .sidebar a.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-        
-        .content {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-        
-        .component-section {
-            background-color: white;
-            border-radius: var(--radius);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        body.dark .component-section {
-            background-color: #0f172a;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-        }
-        
-        .code-section {
-            background-color: #f8fafc;
-            border-radius: var(--radius);
-            padding: 1rem;
-            margin-top: 1rem;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-        
-        body.dark .code-section {
-            background-color: #1e293b;
-        }
-        
-        h2 {
-            margin-top: 0;
-            color: var(--text-color);
-        }
-        
-        .component-demo {
+        .header-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+            padding: 0 1.5rem;
+            max-width: 90rem;
+            margin: 0 auto;
         }
         
-        .controls {
+        .logo-container {
             display: flex;
             align-items: center;
-            margin-bottom: 1.5rem;
-            gap: 1rem;
+            gap: 0.75rem;
         }
         
-        .theme-toggle {
+        .logo {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--foreground);
+            text-decoration: none;
+        }
+        
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem; /* Increased gap for better spacing */
+        }
+        
+        .desktop-nav {
+            /* Removed margin-left */
+            height: 100%;
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 3.5rem;
+            left: 0;
+            right: 0;
+            flex-direction: column;
+            background-color: var(--background);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            z-index: 100; /* Increased z-index to be above backdrop */
+            animation: slideDown 0.2s ease forwards;
+            opacity: 1;
+            gap: 1.25rem;
+            max-height: 85vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .mobile-nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 101;
+        }
+        
+        .mobile-nav-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted-foreground);
+            margin: 0;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            height: 4rem;
+            padding: 0 0.25rem;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--foreground);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0.5rem;
+            right: 0.5rem;
+            height: 2px;
+            background-color: var(--foreground);
+            opacity: 0;
+            transform: scaleX(0.5);
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        
+        .nav-link:hover::after {
+            opacity: 0.3;
+            transform: scaleX(1);
+        }
+        
+        .nav-link.active::after {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+        
+        .header-controls {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-        
-        .theme-toggle-button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 0.75rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-        
-        .theme-toggle-button:hover {
-            background: var(--primary-hover);
-        }
-        
-        /* Status indicator */
-        .refresh-indicator {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            background-color: #22c55e;
-            color: white;
-            border-radius: 100px;
-            font-size: 0.75rem;
             margin-left: auto;
         }
         
-        .refresh-indicator.updating {
-            background-color: #f59e0b;
+        .theme-toggle-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--foreground);
+            background: transparent;
+            border: none;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: 
+                background-color 0.15s ease, 
+                color 0.15s ease;
+        }
+        
+        .theme-toggle-button:hover {
+            background-color: var(--accent);
+        }
+        
+        .refresh-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            height: 2.25rem;
+            padding: 0 0.75rem;
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border-radius: var(--radius);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        
+        .refresh-button:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            width: 260px;
+            padding: 1.5rem 1rem;
+            border-right: 1px solid var(--border);
+            height: calc(100vh - 4rem);
+            position: sticky;
+            top: 4rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-header {
+            padding: 0 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-title {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            border-radius: var(--radius);
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: 
+                background-color 0.2s ease, 
+                color 0.2s ease;
+        }
+        
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background-color: var(--accent);
+            color: var(--foreground);
+            font-weight: 600;
+        }
+        
+        .content-container {
+            flex: 1;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .container-inner {
+            max-width: 768px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Component Showcase */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+        }
+        
+        .page-description {
+            font-size: 1rem;
+            color: var(--muted-foreground);
+            max-width: 42rem;
+        }
+        
+        .component-section {
+            margin-bottom: 3rem;
+            border-radius: var(--radius);
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        
+        .component-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .component-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.025em;
+        }
+        
+        .component-demo {
+            padding: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+        
+        .code-section {
+            background-color: var(--card);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            color: var(--card-foreground);
+        }
+        
+        .code-section pre {
+            margin: 0;
+        }
+        
+        .code-section code {
+            white-space: pre;
+            tab-size: 2;
+        }
+        
+        /* Utilities */
+        .hmr-indicator {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+        }
+        
+        .hmr-indicator.updating {
+            background-color: hsl(48, 96%, 89%);
+            color: hsl(20, 14%, 18%);
+        }
+        
+        /* Media queries for responsiveness */
+        @media (max-width: 1024px) {
+            .header-nav {
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .main-header {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background-color: var(--background);
+                box-shadow: none;
+                border-bottom: 1px solid var(--border);
+                z-index: 120; /* Make header above all elements */
+                position: relative; /* Ensure proper stacking context */
+                height: 3.5rem;
+            }
+            
+            .header-container {
+                padding: 0 1.25rem;
+            }
+            
+            .desktop-nav {
+                display: none;
+            }
+            
+            .menu-toggle-button {
+                display: flex;
+            }
+            
+            /* Mobile navigation styling */
+            .mobile-nav {
+                display: none;
+                flex-direction: column;
+                gap: 1rem;
+                position: fixed;
+                top: 4rem; /* Height of the header */
+                left: 0;
+                width: 100%;
+                max-width: 20rem; /* Max width for mobile nav */
+                height: calc(100vh - 4rem);
+                overflow-y: auto;
+                background-color: var(--background);
+                border-right: 1px solid var(--border);
+                padding: 1.5rem;
+                z-index: 100;
+                box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+                animation: slideIn 0.2s ease forwards;
+            }
+            
+            .mobile-nav.active {
+                display: flex;
+            }
+            
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-10%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            .mobile-nav-section {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--border);
+                width: 100%;
+            }
+            
+            .mobile-nav-section:last-child {
+                border-bottom: none;
+            }
+            
+            .mobile-nav-title {
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: var(--foreground);
+                margin: 0 0 0.5rem 0;
+            }
+            
+            .mobile-nav .nav-link {
+                height: auto;
+                padding: 0.75rem 1rem;
+                border-radius: var(--radius);
+                width: 100%;
+                display: flex;
+                align-items: center;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+            
+            .mobile-nav .nav-link:hover {
+                background-color: var(--secondary);
+                color: var(--secondary-foreground);
+            }
+            
+            .mobile-nav .nav-link::after {
+                display: none; /* Remove underline on mobile navigation */
+            }
+            
+            .mobile-nav .nav-link.active {
+                background-color: var(--accent);
+                color: var(--accent-foreground);
+                font-weight: 600;
+            }
+            
+            /* Mobile backdrop overlay */
+            .nav-backdrop {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 90; /* Below mobile nav but above other content */
+                animation: fadeIn 0.15s ease forwards;
+                backdrop-filter: blur(2px);
+            }
+            
+            .nav-backdrop.active {
+                display: block;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+            }
+            
+            /* Fix for backdrop blur interfering with clickability */
+            .mobile-nav {
+                transform: translateZ(0);
+                /* Disable backdrop filter from affecting children */
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            
+            /* Adjust logo spacing */
+            .logo-container {
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+            
+            .refresh-button {
+                display: none;
+            }
+            
+            .logo {
+                font-size: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.875rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .component-demo {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+        
+        /* Custom fixes for active states */
+        .nav-link.active {
+            color: var(--foreground);
+            font-weight: 600;
+        }
+        
+        .sidebar-nav a.active {
+            background-color: var(--accent);
+            color: var(--foreground) !important;
+            font-weight: 600;
+        }
+        
+        /* Link button styles */
+        .link-button {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+        
+        .link-button pure-button {
+            display: inline-flex;
+        }
+        
+        /* Mobile menu toggle button - updated to match shadcn style */
+        .menu-toggle-button {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            padding: 0;
+            border-radius: var(--radius);
+            color: var(--foreground);
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            position: relative;
+            z-index: 110; /* Ensure toggle button is above all other elements */
+            transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+        }
+        
+        .menu-toggle-button:hover {
+            background-color: var(--accent);
+        }
+        
+        .menu-toggle-button:active {
+            transform: scale(0.95);
+        }
+        
+        .menu-toggle-button.active {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+        
+        .menu-toggle-button svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            stroke-width: 2;
+            pointer-events: none;
+        }
+        
+        .menu-icon {
+            display: block;
+        }
+        
+        .close-icon {
+            display: none;
+        }
+        
+        .menu-toggle-button.active .menu-icon {
+            display: none;
+        }
+        
+        .menu-toggle-button.active .close-icon {
+            display: block;
+        }
+        
+        .close-icon, .menu-icon {
+            transition: opacity 0.2s ease;
         }
     </style>
 </head>
 <body>
-    <div class="layout">
-        <aside class="sidebar">
-            <h1>PureCN Dev</h1>
-            <ul id="component-list">
-                <li><a href="#button" class="active">Button</a></li>
-                <li><a href="#avatar">Avatar</a></li>
-                <li><a href="#card">Card</a></li>
-                <li><a href="#theme">Theme</a></li>
-            </ul>
-            
-            <div class="controls" style="margin-top: 2rem;">
-                <div class="theme-toggle">
-                    <button id="theme-toggle" class="theme-toggle-button">
-                        <span id="theme-label">Toggle Dark Mode</span>
-                        <span id="theme-icon" style="margin-left: 8px; display: inline-block; width: 20px;">🌙</span>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="header-container">
+                <div class="logo-container">
+                    <button id="menu-toggle" class="menu-toggle-button" aria-label="Toggle navigation menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
+                            <line x1="4" y1="12" x2="20" y2="12"></line>
+                            <line x1="4" y1="6" x2="20" y2="6"></line>
+                            <line x1="4" y1="18" x2="20" y2="18"></line>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="close-icon">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
                     </button>
+                    <a href="#" class="logo">
+                        PureCN UI
+                    </a>
                 </div>
-                <div id="hmr-status" class="refresh-indicator">HMR Ready</div>
+                
+                <!-- Desktop navigation -->
+                <nav class="header-nav desktop-nav">
+                    <a href="#features" class="nav-link" id="docs-link">Documentation</a>
+                    <a href="#button" class="nav-link active" id="components-link">Components</a>
+                    <a href="#theme" class="nav-link" id="themes-link">Themes</a>
+                    <a href="#examples-basic" class="nav-link" id="examples-link">Examples</a>
+                </nav>
+                
+                <!-- Mobile navigation -->
+                <nav class="header-nav mobile-nav" id="mobile-nav">
+                    <div class="mobile-nav-section">
+                        <h4 class="mobile-nav-title">Navigation</h4>
+                        <a href="#features" class="nav-link" id="mobile-docs-link"><span>Documentation</span></a>
+                        <a href="#button" class="nav-link active" id="mobile-components-link"><span>Components</span></a>
+                        <a href="#theme" class="nav-link" id="mobile-themes-link"><span>Themes</span></a>
+                        <a href="#examples-basic" class="nav-link" id="mobile-examples-link"><span>Examples</span></a>
+                    </div>
+                    
+                    <div class="mobile-nav-section">
+                        <h4 class="mobile-nav-title">Components</h4>
+                        <a href="#button" class="nav-link"><span>Button</span></a>
+                        <a href="#avatar" class="nav-link"><span>Avatar</span></a>
+                        <a href="#card" class="nav-link"><span>Card</span></a>
+                        <a href="#theme" class="nav-link"><span>Theme</span></a>
+                    </div>
+                    
+                    <div class="mobile-nav-section">
+                        <h4 class="mobile-nav-title">Documentation</h4>
+                        <a href="#features" class="nav-link"><span>Features</span></a>
+                        <a href="#installation" class="nav-link"><span>Installation</span></a>
+                        <a href="#usage" class="nav-link"><span>Usage</span></a>
+                        <a href="#development" class="nav-link"><span>Development</span></a>
+                    </div>
+                    
+                    <div class="mobile-nav-section">
+                        <h4 class="mobile-nav-title">Examples</h4>
+                        <a href="#examples-basic" class="nav-link"><span>Basic Usage</span></a>
+                        <a href="#examples-custom" class="nav-link"><span>Custom Components</span></a>
+                        <a href="#examples-extensibility" class="nav-link"><span>Extensibility</span></a>
+                    </div>
+                </nav>
+                
+                <div class="header-controls">
+                    <button id="refresh-btn" class="refresh-button">
+                        Refresh Styles
+                    </button>
+                    <button id="theme-toggle" class="theme-toggle-button" aria-label="Toggle theme">
+                        <span id="theme-icon">🌙</span>
+                    </button>
+                    <div id="hmr-status" class="hmr-indicator">Ready</div>
+                </div>
             </div>
+        </header>
+        
+        <!-- Add the nav backdrop for mobile -->
+        <div id="nav-backdrop" class="nav-backdrop"></div>
+        
+        <main class="main-content">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h4 class="sidebar-title">Components</h4>
+                </div>
+                <nav class="sidebar-nav" id="component-list">
+                    <a href="#button" class="active">Button</a>
+                    <a href="#avatar">Avatar</a>
+                    <a href="#card">Card</a>
+                    <a href="#theme">Theme</a>
+                </nav>
+                
+                <div class="sidebar-header">
+                    <h4 class="sidebar-title">Documentation</h4>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#features">Features</a>
+                    <a href="#installation">Installation</a>
+                    <a href="#usage">Usage</a>
+                    <a href="#development">Development</a>
+                </nav>
+                
+                <div class="sidebar-header">
+                    <h4 class="sidebar-title">Examples</h4>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#examples-basic">Basic Usage</a>
+                    <a href="#examples-custom">Custom Components</a>
+                    <a href="#examples-extensibility">Extensibility</a>
+                </nav>
         </aside>
         
-        <main class="content">
+            <div class="content-container">
+                <div class="container-inner">
+                    <div class="page-header">
+                        <h1 class="page-title">Components</h1>
+                        <p class="page-description">Beautifully designed components built with PureCN UI and web components.</p>
+                    </div>
+                    
             <section id="button" class="component-section">
-                <h2>Button Component</h2>
-                <p>Interactive button component with multiple variants and states.</p>
+                        <div class="component-header">
+                            <h2 class="component-title">Button</h2>
+                        </div>
                 
                 <div class="component-demo" id="button-demo">
                     <!-- Variants -->
@@ -360,8 +975,9 @@
             </section>
             
             <section id="avatar" class="component-section" style="display: none;">
-                <h2>Avatar Component</h2>
-                <p>Avatar component for user profile pictures with fallback support.</p>
+                        <div class="component-header">
+                            <h2 class="component-title">Avatar</h2>
+                        </div>
                 
                 <div class="component-demo" id="avatar-demo">
                     <!-- Sizes -->
@@ -426,33 +1042,34 @@
             </section>
             
             <section id="card" class="component-section" style="display: none;">
-                <h2>Card Component</h2>
-                <p>Card component for containing content in a stylish container.</p>
+                        <div class="component-header">
+                            <h2 class="component-title">Card</h2>
+                        </div>
                 
                 <div class="component-demo" id="card-demo">
                     <!-- Default card -->
-                    <pure-card style="width: 300px;">
+                            <pure-card style="width: 260px;">
                         <h3>Default Card</h3>
                         <p>This is a default card component.</p>
                         <pure-button>Action</pure-button>
                     </pure-card>
                     
                     <!-- Outline card -->
-                    <pure-card variant="outline" style="width: 300px;">
+                            <pure-card variant="outline" style="width: 260px;">
                         <h3>Outline Card</h3>
                         <p>This is an outline card component.</p>
                         <pure-button variant="outline">Action</pure-button>
                     </pure-card>
                     
                     <!-- Ghost card -->
-                    <pure-card variant="ghost" style="width: 300px;">
+                            <pure-card variant="ghost" style="width: 260px;">
                         <h3>Ghost Card</h3>
                         <p>This is a ghost card component.</p>
                         <pure-button variant="ghost">Action</pure-button>
                     </pure-card>
                     
                     <!-- Hover card -->
-                    <pure-card hover style="width: 300px;">
+                            <pure-card hover style="width: 260px;">
                         <h3>Hover Card</h3>
                         <p>This card has hover effects enabled.</p>
                         <pure-button variant="secondary">Action</pure-button>
@@ -474,10 +1091,17 @@
             </section>
             
             <section id="theme" class="component-section" style="display: none;">
-                <h2>Theme Provider</h2>
-                <p>Utilities for managing themes in your application.</p>
+                        <div class="component-header">
+                            <h2 class="component-title">Theme</h2>
+                        </div>
                 
                 <div class="component-demo">
+                            <div style="width: 100%;">
+                                <h3>Theme Provider</h3>
+                                <p>PureCN UI comes with a beautiful default light and dark theme.</p>
+                            </div>
+                        </div>
+                        
                     <div class="code-section">
                         <pre><code>// Import theme provider
 import { applyThemes, setTheme } from '/components/theme/theme-provider.js';
@@ -487,53 +1111,492 @@ applyThemes();
 
 // Set specific theme
 setTheme('dark'); // 'light', 'dark', or 'system'</code></pre>
+                        </div>
+                    </section>
+                    
+                    <section id="features" class="component-section" style="display: none;">
+                        <div class="component-header">
+                            <h2 class="component-title">Features</h2>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <ul>
+                                    <li><strong>Web Components:</strong> Built with standard web components</li>
+                                    <li><strong>Themeable:</strong> Supports light and dark modes</li>
+                                    <li><strong>TypeScript:</strong> Fully typed components</li>
+                                    <li><strong>Hot Module Replacement:</strong> Fast development experience</li>
+                                    <li><strong>Shadow DOM:</strong> Style encapsulation</li>
+                                </ul>
                     </div>
                 </div>
             </section>
+                    
+                    <section id="installation" class="component-section" style="display: none;">
+                        <div class="component-header">
+                            <h2 class="component-title">Installation</h2>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <p>Install PureCN globally:</p>
+                            </div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <pre><code># Install globally
+npm install -g purecn
+
+# Initialize in your project
+purecn init ./my-project
+
+# Add specific components
+purecn components add button ./my-project</code></pre>
+                        </div>
+                    </section>
+                    
+                    <section id="usage" class="component-section" style="display: none;">
+                        <div class="component-header">
+                            <h2 class="component-title">Usage</h2>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <p>Include the components in your HTML:</p>
+                            </div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <pre><code>&lt;!-- Import components --&gt;
+&lt;script type="module" src="/path/to/purecn/button.js"&gt;&lt;/script&gt;
+
+&lt;!-- Use components --&gt;
+&lt;pure-button&gt;Click me&lt;/pure-button&gt;
+&lt;pure-button variant="outline"&gt;Outlined&lt;/pure-button&gt;</code></pre>
+                        </div>
+                    </section>
+                    
+                    <section id="development" class="component-section" style="display: none;">
+                        <div class="component-header">
+                            <h2 class="component-title">Development</h2>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <h3>Quick Start</h3>
+                                <p>To start the development server with hot reloading:</p>
+                            </div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <pre><code>npm start</code></pre>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <p>This will:</p>
+                                <ol>
+                                    <li>Build components if needed</li>
+                                    <li>Start the development server</li>
+                                    <li>Enable Hot Module Replacement</li>
+                                </ol>
+                                
+                                <h3>Other Scripts</h3>
+                                <ul>
+                                    <li><code>npm run build</code> - Build the library for production</li>
+                                    <li><code>npm start</code> - Alias for <code>npm run dev</code></li>
+                                    <li><code>npm run dev</code> - Start the development server with the custom Node script</li>
+                                    <li><code>npm run dev:rspack</code> - Start development server directly with rspack</li>
+                                    <li><code>npm test</code> - Run the test suite</li>
+                                    <li><code>npm run verify</code> - Verify project structure</li>
+                                    <li><code>npm run analyze</code> - Analyze bundle sizes</li>
+                                    <li><code>npm run types</code> - Generate TypeScript declaration files</li>
+                                </ul>
+                                
+                                <h3>Project Structure</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <pre><code>src/
+├── components/         # Web components
+│   ├── avatar/         # Avatar component
+│   ├── button/         # Button component
+│   ├── card/           # Card component
+│   ├── theme/          # Theme component & provider
+│   └── base-component.ts # Base component class
+├── pages/              # Development pages
+└── types/              # TypeScript types</code></pre>
+                        </div>
+                    </section>
+                    
+                    <section id="examples-basic" class="component-section" style="display: none;">
+                        <div class="component-header">
+                            <h2 class="component-title">Basic Usage Example</h2>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <p>Shows how to use PureCN components directly from CDN with simple imports.</p>
+                                <a href="/examples/basic-usage/index.html" target="_blank" rel="noopener noreferrer" class="link-button">
+                                    <pure-button>View Basic Usage Example</pure-button>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;PureCN Basic Usage&lt;/title&gt;
+  
+  &lt;!-- Import components from CDN --&gt;
+  &lt;script type="module" src="https://unpkg.com/purecn/dist/button.js"&gt;&lt;/script&gt;
+  &lt;script type="module" src="https://unpkg.com/purecn/dist/card.js"&gt;&lt;/script&gt;
+  &lt;script type="module" src="https://unpkg.com/purecn/dist/theme-provider.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;PureCN Basic Usage&lt;/h1&gt;
+  
+  &lt;!-- Use components directly in HTML --&gt;
+  &lt;pure-button&gt;Click Me&lt;/pure-button&gt;
+  &lt;pure-button variant="destructive"&gt;Delete&lt;/pure-button&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        </div>
+                    </section>
+                    
+                    <section id="examples-custom" class="component-section" style="display: none;">
+                        <div class="component-header">
+                            <h2 class="component-title">Custom Components Example</h2>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <p>Demonstrates using components copied locally via the CLI and customized with CSS.</p>
+                                <a href="/examples/custom-components/index.html" target="_blank" rel="noopener noreferrer" class="link-button">
+                                    <pure-button>View Custom Components Example</pure-button>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <pre><code>/* custom-styles.css */
+pure-button::part(button) {
+  /* Custom styles applied to the button part */
+  border-radius: 20px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Override theme variables */
+html {
+  --primary-color: #8a2be2; /* Custom purple */
+  --secondary-color: #ff6b6b; /* Custom coral */
+}</code></pre>
+                        </div>
+                    </section>
+                    
+                    <section id="examples-extensibility" class="component-section" style="display: none;">
+                        <div class="component-header">
+                            <h2 class="component-title">Extensibility Example</h2>
+                        </div>
+                        
+                        <div class="component-demo">
+                            <div style="width: 100%;">
+                                <p>Shows how to extend components programmatically with custom JavaScript.</p>
+                                <a href="/examples/source-components/index.html" target="_blank" rel="noopener noreferrer" class="link-button">
+                                    <pure-button>View Extensibility Example</pure-button>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <pre><code>// Extend the base Button component
+import { PureButton } from 'purecn';
+
+// Create a custom button with extended functionality
+class CustomButton extends PureButton {
+  constructor() {
+    super();
+    // Add custom behavior
+    this.addEventListener('click', this._handleAnimatedClick);
+  }
+  
+  _handleAnimatedClick() {
+    // Custom animation logic
+    this.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      this.style.transform = 'scale(1)';
+    }, 100);
+  }
+}</code></pre>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </main>
+        
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-content">
+                    <p>Built with PureCN UI. The component library for your next web application.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">GitHub</a>
+                    <a href="#" class="footer-link">Documentation</a>
+                    <a href="#" class="footer-link">API</a>
+                </div>
+            </div>
+        </footer>
     </div>
     
-    <!-- Script to handle navigation -->
+    <style>
+        /* Footer styles */
+        .main-footer {
+            padding: 2rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background-color: var(--background);
+        }
+        
+        .footer-container {
+            max-width: 90rem;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .footer-content {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-link {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--foreground);
+        }
+        
+        @media (max-width: 640px) {
+            .footer-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .main-footer {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+    
+    <!-- Script to handle navigation and interactions -->
     <script>
-        // Simple navigation
-        const links = document.querySelectorAll('.sidebar a');
-        const sections = document.querySelectorAll('.component-section');
-        
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
+        // Make refreshTheme function globally available immediately
+        window.refreshTheme = function() {
+            if (window.themeProvider && window.themeProvider.applyThemes) {
+                console.log('Explicitly refreshing theme...');
+                window.themeProvider.applyThemes();
                 
-                // Update active link
-                links.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                
-                // Show active section
-                const targetId = link.getAttribute('href').substring(1);
-                sections.forEach(section => {
-                    section.style.display = section.id === targetId ? 'block' : 'none';
+                // Force refresh any component styles
+                document.querySelectorAll('pure-button, pure-avatar, pure-card, purecn-theme').forEach(elem => {
+                    console.log(`Forcing refresh of ${elem.tagName.toLowerCase()}`);
+                    // Trigger a repaint by briefly toggling a class
+                    elem.classList.add('__refresh');
+                    setTimeout(() => elem.classList.remove('__refresh'), 10);
                 });
-            });
-        });
+            }
+        };
         
-        // Theme toggle with icon update
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeLabel = document.getElementById('theme-label');
-        const themeIcon = document.getElementById('theme-icon');
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reference elements
+            const allSidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            const sections = document.querySelectorAll('.component-section');
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const hmrStatus = document.getElementById('hmr-status');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const navLinks = document.querySelectorAll('.desktop-nav .nav-link');
+            
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileNav = document.getElementById('mobile-nav');
+            const navBackdrop = document.getElementById('nav-backdrop');
+            
+            // Toggle mobile menu
+            if (menuToggle && mobileNav) {
+                const toggleMenu = () => {
+                    mobileNav.classList.toggle('active');
+                    menuToggle.classList.toggle('active');
+                    navBackdrop.classList.toggle('active');
+                    document.documentElement.classList.toggle('mobile-menu-open');
+                    document.body.classList.toggle('mobile-menu-open');
+                    
+                    // Ensure mobile nav links are clickable
+                    const isOpen = mobileNav.classList.contains('active');
+                    
+                    // Prevent body scroll when menu is open
+                    document.body.style.overflow = isOpen ? 'hidden' : '';
+                    
+                    // Force links to be clickable when menu is open
+                    if (isOpen) {
+                        const allLinks = mobileNav.querySelectorAll('.nav-link');
+                        allLinks.forEach(link => {
+                            link.style.pointerEvents = 'auto';
+                            link.style.cursor = 'pointer';
+                            link.tabIndex = 0; // Make focusable
+                        });
+                    }
+                };
+                
+                menuToggle.addEventListener('click', toggleMenu);
+                
+                // Close mobile menu when backdrop is clicked
+                navBackdrop.addEventListener('click', toggleMenu);
+                
+                // Close mobile menu when a link is clicked
+                const allMobileLinks = document.querySelectorAll('.mobile-nav .nav-link');
+                allMobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 768 && mobileNav.classList.contains('active')) {
+                            toggleMenu();
+                        }
+                    });
+                });
+                
+                // Close mobile menu on window resize if wider than mobile breakpoint
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 768 && mobileNav.classList.contains('active')) {
+                        toggleMenu();
+                    }
+                });
+                
+                // Close menu on escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                        toggleMenu();
+                    }
+                });
+            }
+            
+            // Create section groups for navigation
+            const sectionGroups = {
+                components: ['button', 'avatar', 'card', 'theme'],
+                documentation: ['features', 'installation', 'usage', 'development'],
+                examples: ['examples-basic', 'examples-custom', 'examples-extensibility']
+            };
         
         // Function to update button based on current theme
         function updateThemeButton() {
             const isDark = document.body.classList.contains('dark');
-            themeLabel.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
             themeIcon.textContent = isDark ? '☀️' : '🌙';
         }
         
-        // Initialize the button state
+            // Check for preferred color scheme
+            function getPreferredTheme() {
+                if (localStorage.getItem('theme') === 'dark' || 
+                   (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.body.classList.add('dark');
+                } else {
+                    document.body.classList.remove('dark');
+                }
         updateThemeButton();
-        
+            }
+            
+            // Get the group a section belongs to
+            function getSectionGroup(sectionId) {
+                for (const [group, sections] of Object.entries(sectionGroups)) {
+                    if (sections.includes(sectionId)) {
+                        return group;
+                    }
+                }
+                return null;
+            }
+            
+            // Initialize theme
+            getPreferredTheme();
+            
+            // Set active tab based on URL hash or localStorage
+            function setActiveTab() {
+                // First check URL hash
+                let targetId = window.location.hash ? window.location.hash.substring(1) : null;
+                
+                // If no hash, check localStorage
+                if (!targetId) {
+                    targetId = localStorage.getItem('activeTab') || 'button';
+                }
+                
+                // Identify which group this section belongs to
+                const group = getSectionGroup(targetId);
+                
+                // Update all sidebar links
+                allSidebarLinks.forEach(l => {
+                    const linkTargetId = l.getAttribute('href').substring(1);
+                    if (linkTargetId === targetId) {
+                        l.classList.add('active');
+                    } else {
+                        l.classList.remove('active');
+                    }
+                });
+                
+                // Show the active section only
+                sections.forEach(section => {
+                    section.style.display = section.id === targetId ? 'block' : 'none';
+                });
+                
+                // Update header navigation links
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Set the appropriate nav link as active
+                if (group === 'components') {
+                    document.getElementById('components-link').classList.add('active');
+                } else if (group === 'documentation') {
+                    document.getElementById('docs-link').classList.add('active');
+                } else if (group === 'examples') {
+                    document.getElementById('examples-link').classList.add('active');
+                } else if (targetId === 'theme') {
+                    document.getElementById('themes-link').classList.add('active');
+                }
+                
+                // Update hash in URL without scrolling
+                if (history.pushState) {
+                    history.pushState(null, null, `#${targetId}`);
+                } else {
+                    location.hash = `#${targetId}`;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('activeTab', targetId);
+            }
+            
+            // Initialize the active tab
+            setActiveTab();
+            
+            // Theme toggle
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark');
             
-            // Update button text and icon
+                // Store preference
+                localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+                
+                // Update button icon
             updateThemeButton();
             
             // Dispatch theme change event for components to react
@@ -545,10 +1608,101 @@ setTheme('dark'); // 'light', 'dark', or 'system'</code></pre>
             document.dispatchEvent(event);
         });
         
-        // HMR Status indicator
-        const hmrStatus = document.getElementById('hmr-status');
-        
-        // Listen for changes from Rspack HMR
+            // Refresh styles button
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', () => {
+                    if (window.refreshTheme) {
+                        window.refreshTheme();
+                        
+                        // Show visual feedback
+                        hmrStatus.textContent = 'Refreshing...';
+                        hmrStatus.classList.add('updating');
+                        
+                        // Reset after a short delay
+                        setTimeout(() => {
+                            hmrStatus.textContent = 'Ready';
+                            hmrStatus.classList.remove('updating');
+                        }, 1000);
+                    }
+                });
+            }
+            
+            // Header navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    const targetId = link.getAttribute('href').substring(1);
+                    
+                    // Update active state in header
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Update URL and show correct section
+                    if (history.pushState) {
+                        history.pushState(null, null, `#${targetId}`);
+                    } else {
+                        location.hash = `#${targetId}`;
+                    }
+                    
+                    // Save to localStorage and update UI
+                    localStorage.setItem('activeTab', targetId);
+                    setActiveTab();
+                });
+            });
+            
+            // Navigation - all sidebar links
+            allSidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Get target ID
+                    const targetId = link.getAttribute('href').substring(1);
+                    
+                    // Identify which group this section belongs to
+                    const group = getSectionGroup(targetId);
+                    
+                    // Update UI for sidebar
+                    allSidebarLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Show active section
+                    sections.forEach(section => {
+                        section.style.display = section.id === targetId ? 'block' : 'none';
+                    });
+                    
+                    // Update header navigation links
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    
+                    // Set the appropriate nav link as active
+                    if (group === 'components') {
+                        document.getElementById('components-link').classList.add('active');
+                    } else if (group === 'documentation') {
+                        document.getElementById('docs-link').classList.add('active');
+                    } else if (group === 'examples') {
+                        document.getElementById('examples-link').classList.add('active');
+                    } else if (targetId === 'theme') {
+                        document.getElementById('themes-link').classList.add('active');
+                    }
+                    
+                    // Update hash in URL without scrolling
+                    if (history.pushState) {
+                        history.pushState(null, null, `#${targetId}`);
+                    } else {
+                        location.hash = `#${targetId}`;
+                    }
+                    
+                    // Save to localStorage
+                    localStorage.setItem('activeTab', targetId);
+                });
+            });
+            
+            // Listen for hash changes in the URL
+            window.addEventListener('hashchange', setActiveTab);
+            
+            // HMR Status indicator
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'webpackHotUpdate') {
                 hmrStatus.textContent = 'Updating...';
@@ -556,10 +1710,11 @@ setTheme('dark'); // 'light', 'dark', or 'system'</code></pre>
                 
                 // Reset after a short delay
                 setTimeout(() => {
-                    hmrStatus.textContent = 'HMR Ready';
+                        hmrStatus.textContent = 'Ready';
                     hmrStatus.classList.remove('updating');
                 }, 1000);
             }
+            });
         });
     </script>
 </body>

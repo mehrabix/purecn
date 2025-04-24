@@ -24,7 +24,7 @@ Pure web components library with a shadcn-like design system.
 To start the development server with hot reloading:
 
 ```bash
-npm start
+npm run dev
 ```
 
 This will:
@@ -37,10 +37,13 @@ Then open your browser to [http://localhost:9000](http://localhost:9000) to see 
 ### Other Scripts
 
 - `npm run build` - Build the library for production
-- `npm run dev` - Start the development server with hot reloading
-- `npm run fast-dev` - Start a faster dev server (Windows compatible)
+- `npm start` - Alias for `npm run dev`
+- `npm run dev` - Start the development server with the custom Node script
+- `npm run dev:rspack` - Start development server directly with rspack
 - `npm test` - Run the test suite
 - `npm run verify` - Verify project structure
+- `npm run analyze` - Analyze bundle sizes
+- `npm run types` - Generate TypeScript declaration files
 
 ## Project Structure
 
