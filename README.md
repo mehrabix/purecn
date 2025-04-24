@@ -17,6 +17,18 @@ Pure web components library with a shadcn-like design system.
 - **Card**: Content containers
 - **Theme**: Theme toggling and persistence
 
+## GitHub Pages Deployment
+
+This project is configured to automatically deploy the `src/pages` directory to GitHub Pages when changes are pushed to the main branch. This allows for easy showcasing of examples and documentation.
+
+The deployment is handled through GitHub Actions using the workflow defined in `.github/workflows/deploy-pages.yml`.
+
+To access the deployed site, visit: https://[your-username].github.io/purecn/
+
+### Manual Deployment
+
+You can also manually trigger a deployment from the GitHub Actions tab by selecting the "Deploy to GitHub Pages" workflow and clicking "Run workflow".
+
 ## Development
 
 ### Quick Start
@@ -56,7 +68,8 @@ src/
 │   ├── card/           # Card component
 │   ├── theme/          # Theme component & provider
 │   └── base-component.ts # Base component class
-├── pages/              # Development pages
+├── pages/              # Development pages and examples
+│   └── examples/       # Component examples
 └── types/              # TypeScript types
 ```
 
